@@ -16,10 +16,14 @@
     "url": "https://github.com/SamBumgardner/Wikipedia-Quest/issues"
   },
   "homepage": "https://github.com/SamBumgardner/Wikipedia-Quest#readme",
-  "dependencies":{
+  "dependencies": {
     "@polymer/polymer": "^1.2.5-npm-test.2",
-	"connect": "^3.4.0",
-	"page": "github:visionmedia/page.js",
-	"serve-static": "^1.10.2"
+    "connect": "^3.4.0",
+    "page": "github:visionmedia/page.js",
+    "serve-static": "^1.10.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-cli": "^1.2.1"
   }
 }
