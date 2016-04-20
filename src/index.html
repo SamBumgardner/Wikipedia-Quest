@@ -6,6 +6,30 @@
 </head>
 <body>
 <p>Hello World!</p>
+<script>
+var loading_ = true;
+var eventInfo = "";
+var callbackName = "msuCalendarCallback" + Math.round((Math.random() * 100));
+        (function (name) {
+          window[name] = (function (data) {
+            console.log(data);
+            if (name !== callbackName || !data || !data.feed || !data.feed.entry || data.feed.entry.length < 1) {
+              return;
+            }
+            eventInfo = data.feed.entry[0];
+            loading_ = false;
+          }).bind(this);
+        }).call(this, callbackName);
 
+        var script = document.createElement('script');
+        script.src = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=links&list=&titles=Bacon&pllimit=500&callback=' + callbackName;
+        var scripts = document.getElementsByTagName('script');
+        scripts[0].parentNode.insertBefore(script, scripts[0]);
+        script.onload = function () {
+          this.parentElement.removeChild(this);
+        };
+		
+		console.log(eventInfo);
+</script>
 </body>
 </html>
