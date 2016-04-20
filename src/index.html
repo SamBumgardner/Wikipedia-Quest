@@ -8,6 +8,7 @@
     window.Polymer = window.Polymer || {};
     window.Polymer.dom = 'shadow';
   </script>
+  <script src="node_modules/page/page.js"></script>
   
   
   <style>
@@ -50,12 +51,46 @@
 	}
   
   </style>
+  
+  <script>
+    (function () {
+	  page('/', function(context, next){
+		context.handled = true;
+		
+		//For if the user navigated back to the index using the back button.
+		//Displays introductory page, allows user to load, or start fresh.
+		next();
+		
+	  });
+	
+	
+      page('/:wikiPageName', function (context, next) {
+        context.handled = true;
+		
+		//Changes wiki page for the adventure view.
+		// In the adventure view, checks if this matches where
+		// the player should be.
+		changeWikiPage(context.wikipage)
+        next();
+      });
+
+      function changeWikiPage(pageName) {
+		
+		if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+			document.getElementsByTagName('wikipedia-quest')[0].setAttribute('page', pageName);
+		}
+      }
+
+      page.start();
+    })();
+  </script>
 </head>
 <body>
 
+
+
 <div id="overview">
 <p>Hello World!</p>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </div>
 
 <div id="links">
