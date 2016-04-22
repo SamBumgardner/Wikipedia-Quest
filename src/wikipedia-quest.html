@@ -1,0 +1,316 @@
+<link rel="import" href="node_modules/@polymer/polymer/polymer.html" />
+
+<dom-module id="wikipedia-quest">
+	<template>
+		<style>
+		
+			ul.topnav {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+				background-color: #333;
+				display: block;
+				width: 100%;
+			}
+
+			ul.topnav li {
+				float:left;
+			}
+			.test{
+				text-align:center;
+			}
+			ul.topnav li a {
+				display: inline-block;
+				color: #8fc2b8;
+				padding: 14px 16px;
+				text-decoration: none;
+				transition: 0.3s;
+				font-size: 17px;
+			}
+
+			ul.topnav li a:hover {
+				background-color: #111;
+			}
+			
+			
+			
+			#overview {
+				box-sizing: border-box;
+				width: 74%;
+				border-style: solid;
+				float: left;
+				margin-right:1%;
+				margin-bottom:5px;
+				
+				max-height:600px;
+			}
+			#links{
+				box-sizing: border-box;
+				width: 24%;
+				border-style: solid;
+				float: left;
+				margin-left:1%;
+				margin-bottom:5px;
+				
+				max-height:600px
+			}
+			#explore{
+				box-sizing: border-box;
+				width: 74%;
+				border-style: solid;
+				float: left;
+				margin-right:1%;
+			}
+			#search{
+				box-sizing: border-box;
+				width: 24%;
+				border-style: solid;
+				float: left;
+				margin-left:1%;
+			}
+		</style>
+  
+
+	<div class="test">
+		<ul class="topnav">
+			<li><a href="/menu">Main Menu</a></li>
+			<li><a href="/explore">Explore</a></li>
+			<li><a href="/questLog">Quest Log</a></li>
+		</ul>
+	</div>
+	
+	
+    
+	<template is="dom-if" if="[[mainMenuView_]]">
+	  <div hidden=[[!display_]]>
+        <p>This is the main menu view!</p>
+	  </div>
+  </template>
+	
+	<template is="dom-if" if="[[exploreView_]]">
+	  <div hidden=[[!display_]]>
+	
+	    <div id="overview">
+	    <p>This is the explore view!</p>
+	    </div>
+
+	    <div id="links">
+	    <p>Links Go Here!</p>
+	    </div>
+
+	    <div id="explore">
+	    <p>Explore!</p>
+	    </div>
+
+	    <div id="search">
+	    <p>Search!</p>
+	    </div>
+	
+	  </div>
+    </template>
+	
+	<template is="dom-if" if="[[questView_]]">
+	  <div hidden=[[!display_]]>
+	    <p>This is the quest view!</p>
+	  </div>
+    </template>
+	
+	
+   
+  </template>
+  <script>
+    // element registration
+    Polymer({
+      is: "wikipedia-quest",
+
+      
+		properties: {
+		
+			currentWikiPage: String,
+			errorMsg: String,
+			playerInitialized_: {
+				type: Boolean,
+				value: false
+			},
+			loading_: {
+				type: Boolean,
+				value: true
+			},
+			error_: {
+				type: Boolean,
+				value: false
+			},
+			display_: {
+				type: Boolean,
+				value: false
+			},
+			mainMenuView_:{
+				type: Boolean,
+				value: true
+			},
+			exploreView_: {
+				type: Boolean,
+				value: false
+			},
+			firstVisit_:{
+				type: Boolean,
+				value: false
+			}
+    },
+
+    attached: function () {
+      this.welcomeUser_();
+    },
+	  
+	  welcomeUser_: function(){
+			this.loading_ = true;
+			this.display_ = false;
+			mainMenuView_ = true;
+			exploreView_ = false;
+			questView_ = false;
+			
+			//Check if the browser has save data stored in it.
+			//If so, set the proper values, which are used by menu's html.
+			
+			//If not, set any necessary values, which are also used by menu's html.
+			
+			this.loading_ = false;
+			this.display_ = true;
+	  },
+	  
+		beginNewGame_: function(){
+			//Do all of the javascript-side setup for a new game:
+			// Select two random pages
+			// Make sure that all of the proper variables are initialized to zero.
+			loadQuestView_();
+		},
+
+		loadQuestView_: function(){
+			this.loading_ = true;
+			this.display_ = false;
+			this.mainMenuView_ = false;
+			this.exploreView_ = false;
+			this.questView_ = true;
+		
+		
+			
+			this.loading_ = false;
+			this.display_ = true;
+		},
+		
+		loadMainMenu_: function(){
+			this.loading_ = true;
+			this.display_ = false;
+			this.mainMenuView_ = true;
+			this.exploreView_ = false;
+			this.questView_ = false;
+			
+
+			
+			this.loading_ = false;
+			this.display_ = true;
+		},
+
+		attributeChanged: function (name, type) {
+			if (/^currentWikiPage$/i.test(name)) {
+				this.loadWikiPage_();
+			}
+		},
+	  
+		loadWikiPage_: function () {
+			this.loading_ = true;
+			this.display_ = false;
+			this.error_ = false;
+			this.mainMenuView_ = false;
+			this.exploreView_ = true;
+			this.questView_ = false;
+	  
+
+		
+	    
+			//Make a call to the mediaWiki API here.
+			/*
+			 {}.bind(this))
+					.catch((function (err) {
+				if(err.message === "server500Error"){
+				this.errorMsg = "A server error occurred. Sorry!";
+				this.error_ = true;
+			}
+			if(err.message === "server404Error"){
+				this.errorMsg = "We have no data for that date.";
+				this.error_ = true;
+			}
+						if(err.message === "invalidDate"){
+				this.errorMsg = "The submitted date was invalid.";
+				this.error_ = true;
+			}
+			this.loading_ = false;
+			this.display_ = false;
+			
+					}).bind(this));
+			*/
+		
+			this.loading_ = false;
+			this.display_ = true;
+		},
+	  
+	  removeAllLinks: function() {
+		//Same idea, but remove links instead.
+		/*var Ul = this.$.listOfEvents;
+		
+		while(Ul.firstChild != null){
+			Ul.firstChild.remove();
+		}*/
+	  },
+	  
+	  insertAllEvents: function() {
+		//Add links with the wiki names
+		//The links will go to the page routing, though.
+		
+		/*
+		var Ul = this.$.listOfEvents;
+
+		if(this.eventList){
+			for( var i = 0; i < this.eventList.length ; i++){
+
+			  
+			  var newListElement = document.createElement("li");
+			  var newParagraph = document.createElement("p"); 
+			  var newLink = document.createElement("a");
+			  
+			  newParagraph.innerHTML = this.formatStartTime(this.eventList[i]);
+			  newLink.href = this.getMoreInfoLink(this.eventList[i].link);
+			  newLink.innerHTML = this.eventList[i].title.$t;
+			  
+			  newParagraph.appendChild(newLink);
+			  newListElement.appendChild(newParagraph);
+			  
+			  
+			  Ul.appendChild(newListElement);
+			}
+		}
+		else{
+			throw new Error("invalidDate");
+		}
+		*/
+		
+	  },
+      getMoreInfoLink: function (links) {
+		//Can use the same idea to generate the hrefs for the wiki links.
+		
+		/*if (!links || links.length < 1) {
+          return '#';
+        }
+
+        for (var i = 0; i < links.length; i++) {
+          if (links[i].rel === 'alternate' && links[i].type === 'text/html') {
+            return links[i].href;
+          }
+        }
+
+        return '#'; */
+      }
+    });
+  </script>
+</dom-module>
