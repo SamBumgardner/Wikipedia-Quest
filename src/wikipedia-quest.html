@@ -120,7 +120,13 @@
     
 		<template is="dom-if" if="[[mainMenuView_]]">
 			<div class="menu" hidden=[[!display_]]>
-					<p>This is the main menu view!</p>
+					<p>
+					This is the main menu view!<br>
+					It's responsible for allowing the player to 
+					save and/or load their progress, as well as 
+					set preferences like font size.
+					
+					</p>
 			</div>
 		</template>
 		
@@ -148,7 +154,12 @@
 		
 		<template is="dom-if" if="[[questView_]]">
 			<div class="quest" hidden=[[!display_]]>
-				<p>This is the quest view!</p>
+				<p>
+				This is the quest view!<br>
+				It's responsible for showing the user their overall goal, as well as
+				various statistics such as time spent playing and total number of pages
+				visited.
+				</p>
 			</div>
     </template>
 	
