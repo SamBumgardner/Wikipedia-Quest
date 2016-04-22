@@ -77,19 +77,28 @@
 				max-height:600px;
 				padding: 5px;
 				background-color:#f0f0f0
+				overflow:hidden;
 			}
 			
 			#overview {
 				width: 75%;
+				height:500px;
 			}
 			#links{
 				width: 25%;
+				height:500px;
 			}
 			#explore{
 				width: 75%;
 			}
 			#search{
 				width: 25%;
+			}
+			
+			#pageImage{
+				max-width: 200px;
+				float: left;
+				padding: 15px;
 			}
 		</style>
   <header>
@@ -111,7 +120,13 @@
     
 		<template is="dom-if" if="[[mainMenuView_]]">
 			<div class="menu" hidden=[[!display_]]>
-					<p>This is the main menu view!</p>
+					<p>
+					This is the main menu view!<br>
+					It's responsible for allowing the player to 
+					save and/or load their progress, as well as 
+					set preferences like font size.
+					
+					</p>
 			</div>
 		</template>
 		
@@ -119,20 +134,32 @@
 			<div class="explore" hidden=[[!display_]]>
 		
 				<div id="overview">
-				<p>This is the explore view!</p>
+
+				<img id="pageImage" src="[[pageImageURL]]"/>
+				<p id="pageSummary">[[pageSummary]]</p>
+
 				
 				</div>
 
 				<div id="links">
 				<p>Links Go Here!</p>
+				<ul>
+					<li><a href="/explore/Kevin%20Bacon">Bacon (Kevin)</a></li>
+					<li><a href="/explore/Lorem%20Ipsum%201">Lorem Ipsum 1</a></li>
+					<li><a href="/explore/Lorem%20Ipsum%202">Lorem Ipsum 2</a></li>
+					<li><a href="/explore/Lorem%20Ipsum%203">Lorem Ipsum 3</a></li>
+					<li><a href="/explore/Lorem%20Ipsum%204">Lorem Ipsum 4</a></li>
+				</ul>
 				</div>
 
 				<div id="explore">
-				<p>Explore!</p>
+				<p><a href="http://en.wikipedia.org/wiki/Bacon" target="_blank">Explore!</a></p>
+				
 				</div>
 
 				<div id="search">
 				<p>Search!</p>
+				<input type="text"></input>
 				</div>
 		
 			</div>
@@ -140,7 +167,12 @@
 		
 		<template is="dom-if" if="[[questView_]]">
 			<div class="quest" hidden=[[!display_]]>
-				<p>This is the quest view!</p>
+				<p>
+				This is the quest view!<br>
+				It's responsible for showing the user their overall goal, as well as
+				various statistics such as time spent playing and total number of pages
+				visited.
+				</p>
 			</div>
     </template>
 	
@@ -157,6 +189,8 @@
 		properties: {
 		
 			currentWikiPage: String,
+			pageSummary: String,
+			pageImageURL: String,
 			errorMsg: String,
 			playerInitialized_: {
 				type: Boolean,
@@ -195,9 +229,9 @@
 	  welcomeUser_: function(){
 			this.loading_ = true;
 			this.display_ = false;
-			mainMenuView_ = true;
-			exploreView_ = false;
-			questView_ = false;
+			this.mainMenuView_ = true;
+			this.exploreView_ = false;
+			this.questView_ = false;
 			
 			//Check if the browser has save data stored in it.
 			//If so, set the proper values, which are used by menu's html.
@@ -256,10 +290,23 @@
 			this.questView_ = false;
 	  
 
+
 			getRemote("https://rest.wikimedia.org/en.wikipedia.org/v1/page/summary/Bacon")
 			.then((function (data) {
 				console.log(data);
 			}).bind(this));
+
+		
+			this.pageSummary = 	"Bacon is a meat product prepared from a pig and usually cured." +
+								"It is first cured using large quantities of salt, either in a " +
+								"brine or in a dry packing; the result is fresh bacon (also known" +
+								"as green bacon). Fresh bacon may then be further dried for weeks " +
+								"or months in cold air, or it may be boiled or smoked. Fresh and " +
+								"dried bacon is typically cooked before eating, often by frying. " +
+								"Boiled bacon is ready to eat, as is some smoked bacon, but may be " +
+								"cooked further before eating.";
+								
+			this.pageImageURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
 
 	    
 			//Make a call to the mediaWiki API here.
