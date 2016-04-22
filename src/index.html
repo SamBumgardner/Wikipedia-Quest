@@ -10,100 +10,90 @@
   </script>
   <script src="node_modules/page/page.js"></script>
   
-  
-  <style>
-	body{
-		background-color:pink;
-	}
-	#overview {
-		box-sizing: border-box;
-		width: 74%;
-		border-style: solid;
-		float: left;
-		margin-right:1%;
-		margin-bottom:5px;
-		
-		max-height:600px;
-	}
-	#links{
-		box-sizing: border-box;
-		width: 24%;
-		border-style: solid;
-		float: left;
-		margin-left:1%;
-		margin-bottom:5px;
-		
-		max-height:600px
-	}
-	#explore{
-		box-sizing: border-box;
-		width: 74%;
-		border-style: solid;
-		float: left;
-		margin-right:1%;
-	}
-	#search{
-		box-sizing: border-box;
-		width: 24%;
-		border-style: solid;
-		float: left;
-		margin-left:1%;
-	}
-  
-  </style>
+	<style>
+		body {
+			margin:0;
+		}
+	</style>
   
   <script>
     (function () {
 	  page('/', function(context, next){
-		context.handled = true;
-		
-		//For if the user navigated back to the index using the back button.
-		//Displays introductory page, allows user to load, or start fresh.
-		next();
-		
+			context.handled = true;
+			
+			//For if the user navigated back to the index using the back button.
+			//returns to the main menu.
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadMainMenu_();
+			}
+			
+			next();
 	  });
-	
-	
-      page('/:wikiPageName', function (context, next) {
-        context.handled = true;
 		
-		//Changes wiki page for the adventure view.
-		// In the adventure view, checks if this matches where
-		// the player should be.
-		changeWikiPage(context.wikipage)
-        next();
-      });
-
-      function changeWikiPage(pageName) {
+		page('/menu', function (context, next) {
+			context.handled = true;
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadMainMenu_();
+			}
+			
+			next();
+		});
 		
-		if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
-			document.getElementsByTagName('wikipedia-quest')[0].setAttribute('page', pageName);
-		}
-      }
+		page('/questLog', function (context, next) {
+			context.handled = true;
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadQuestView_();
+			}
+		
+			next();
+		});
+		
+		page('/explore', function (context, next) {
+			context.handled = true;
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadWikiPage_();
+			}
+			
+			next();
+		});
+	
+    page('/explore/:wikiPageName', function (context, next) {
+			context.handled = true;
+		
+			//Changes wiki page for the adventure view.
+			// In the adventure view, checks if this matches where
+			// the player should be.
+			
+			changeWikiPage(context.wikiPageName);
+			
+      next();
+    });
 
-      page.start();
+    
+		
+		function changeWikiPage(pageName) {
+		
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].setAttribute('currentWikiPage', pageName);
+			}
+    }
+
+    
+		page.start();
     })();
   </script>
+	
+	<link rel="import" href="wikipedia-quest.html" />
 </head>
 <body>
+	<wikipedia-quest></wikipedia-quest>
 
 
 
-<div id="overview">
-<p>Hello World!</p>
-</div>
-
-<div id="links">
-<p>Links Go Here!</p>
-</div>
-
-<div id="explore">
-<p>Explore!</p>
-</div>
-
-<div id="search">
-<p>Search!</p>
-</div>
 
 </body>
 </html>
