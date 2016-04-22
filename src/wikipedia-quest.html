@@ -3,120 +3,147 @@
 <dom-module id="wikipedia-quest">
 	<template>
 		<style>
-		
+			#title{
+				/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#666666+0,343434+100 */
+				background: #666666; /* Old browsers */
+				background: -moz-linear-gradient(top,  #666666 0%, #343434 100%); /* FF3.6-15 */
+				background: -webkit-linear-gradient(top,  #666666 0%,#343434 100%); /* Chrome10-25,Safari5.1-6 */
+				background: linear-gradient(to bottom,  #666666 0%,#343434 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#343434',GradientType=0 ); /* IE6-9 */
+			}
+			#title h1{
+				text-align: center;
+				padding-top: .67em;
+				padding-bottom: .67em;
+				margin: 0;
+				color:#F1f1d4;
+			}
+			#navBar{
+				text-align:center;
+				background-color: #333;
+			}
 			ul.topnav {
 				list-style-type: none;
 				margin: 0;
 				padding: 0;
 				overflow: hidden;
-				background-color: #333;
 				display: block;
+				max-width:960px;
 				width: 100%;
+				
+				margin: auto;
 			}
-
+			
 			ul.topnav li {
 				float:left;
-			}
-			.test{
-				text-align:center;
+				width:320px;
 			}
 			ul.topnav li a {
 				display: inline-block;
-				color: #8fc2b8;
-				padding: 14px 16px;
+				box-sizing: border-box;
+				color: #F1f1d4;
 				text-decoration: none;
 				transition: 0.3s;
 				font-size: 17px;
+				width: 100%;
+				padding-top: 16px;
+				padding-bottom: 16px;
+				border-style: solid;
+				border-color: gray;
+				border-top-style: none;
+				border-bottom-style: none;
+				border-width: 1px;
+			}
+			
+			@media(max-width:959px){
+				ul.topnav li{
+					width: 33.3333%;
+				}
+			
 			}
 
 			ul.topnav li a:hover {
 				background-color: #111;
 			}
 			
+			#mainContent{
+				max-width: 960px;
+				margin: auto;
+			}
 			
+			div.explore div{
+				box-sizing: border-box;
+				float: left;
+				max-height:600px;
+				padding: 5px;
+				background-color:#f0f0f0
+			}
 			
 			#overview {
-				box-sizing: border-box;
-				width: 74%;
-				border-style: solid;
-				float: left;
-				margin-right:1%;
-				margin-bottom:5px;
-				
-				max-height:600px;
+				width: 75%;
 			}
 			#links{
-				box-sizing: border-box;
-				width: 24%;
-				border-style: solid;
-				float: left;
-				margin-left:1%;
-				margin-bottom:5px;
-				
-				max-height:600px
+				width: 25%;
 			}
 			#explore{
-				box-sizing: border-box;
-				width: 74%;
-				border-style: solid;
-				float: left;
-				margin-right:1%;
+				width: 75%;
 			}
 			#search{
-				box-sizing: border-box;
-				width: 24%;
-				border-style: solid;
-				float: left;
-				margin-left:1%;
+				width: 25%;
 			}
 		</style>
-  
+  <header>
+	<div id="title">
+	<h1>Wikipedia Quest</h1>
+	
+	</div>
 
-	<div class="test">
+	<div id="navBar">
 		<ul class="topnav">
 			<li><a href="/menu">Main Menu</a></li>
 			<li><a href="/explore">Explore</a></li>
 			<li><a href="/questLog">Quest Log</a></li>
 		</ul>
 	</div>
+	</header>
 	
-	
+	<div id="mainContent">
     
-	<template is="dom-if" if="[[mainMenuView_]]">
-	  <div hidden=[[!display_]]>
-        <p>This is the main menu view!</p>
-	  </div>
-  </template>
-	
-	<template is="dom-if" if="[[exploreView_]]">
-	  <div hidden=[[!display_]]>
-	
-	    <div id="overview">
-	    <p>This is the explore view!</p>
-	    </div>
+		<template is="dom-if" if="[[mainMenuView_]]">
+			<div class="menu" hidden=[[!display_]]>
+					<p>This is the main menu view!</p>
+			</div>
+		</template>
+		
+		<template is="dom-if" if="[[exploreView_]]">
+			<div class="explore" hidden=[[!display_]]>
+		
+				<div id="overview">
+				<p>This is the explore view!</p>
+				</div>
 
-	    <div id="links">
-	    <p>Links Go Here!</p>
-	    </div>
+				<div id="links">
+				<p>Links Go Here!</p>
+				</div>
 
-	    <div id="explore">
-	    <p>Explore!</p>
-	    </div>
+				<div id="explore">
+				<p>Explore!</p>
+				</div>
 
-	    <div id="search">
-	    <p>Search!</p>
-	    </div>
-	
-	  </div>
+				<div id="search">
+				<p>Search!</p>
+				</div>
+		
+			</div>
+		</template>
+		
+		<template is="dom-if" if="[[questView_]]">
+			<div class="quest" hidden=[[!display_]]>
+				<p>This is the quest view!</p>
+			</div>
     </template>
 	
-	<template is="dom-if" if="[[questView_]]">
-	  <div hidden=[[!display_]]>
-	    <p>This is the quest view!</p>
-	  </div>
-    </template>
-	
-	
+	</div>
    
   </template>
   <script>
