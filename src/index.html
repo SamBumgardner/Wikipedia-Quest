@@ -3,9 +3,99 @@
 <head lang="en">
   <meta charset="UTF-8">
   <title>Wikipedia Quest</title>
+  
+  <script>
+    window.Polymer = window.Polymer || {};
+    window.Polymer.dom = 'shadow';
+  </script>
+  <script src="node_modules/page/page.js"></script>
+  
+	<style>
+		body {
+			margin:0;
+		}
+	</style>
+  
+  <script>
+    (function () {
+	  page('/', function(context, next){
+			context.handled = true;
+			
+			//For if the user navigated back to the index using the back button.
+			//returns to the main menu.
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadMainMenu_();
+			}
+			
+			next();
+	  });
+		
+		page('/menu', function (context, next) {
+			context.handled = true;
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadMainMenu_();
+			}
+			
+			next();
+		});
+		
+		page('/questLog', function (context, next) {
+			context.handled = true;
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadQuestView_();
+			}
+		
+			next();
+		});
+		
+		page('/explore', function (context, next) {
+			context.handled = true;
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadWikiPage_();
+			}
+			
+			next();
+		});
+	
+    page('/explore/:wikiPageName', function (context, next) {
+			context.handled = true;
+		
+			//Changes wiki page for the adventure view.
+			// In the adventure view, checks if this matches where
+			// the player should be.
+			
+			changeWikiPage(context.wikiPageName);
+			
+      next();
+    });
+
+    
+		
+		function changeWikiPage(pageName) {
+		
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].setAttribute('currentWikiPage', pageName);
+			}
+    }
+
+    
+		page.start();
+    })();
+  </script>
+	
+	<link rel="import" href="wikipedia-quest.html" />
 </head>
 <body>
-<p>Hello World!</p>
+
+
+
+<wikipedia-quest></wikipedia-quest>
+
+
 <script>
 var loading_ = true;
 var eventInfo = "";
@@ -20,6 +110,8 @@ var callbackName = "msuCalendarCallback" + Math.round((Math.random() * 100));
             loading_ = false;
           }).bind(this);
         }).call(this, callbackName);
+
+	
 
         var script = document.createElement('script');
         script.src = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=links&list=&titles=Bacon&pllimit=500&callback=' + callbackName;
