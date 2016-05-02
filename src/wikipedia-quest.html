@@ -189,7 +189,8 @@
 		
 			<template is="dom-if" if="[[mainMenuView_]]">
 				<div class="menu" hidden=[[!display_]]>
-						<div id="menuInstructions">
+					<div class="wrapper">
+						<div id="menuInstructions" class="content">
 							<p>
 							This is the main menu view!<br>
 							It's responsible for allowing the player to 
@@ -198,14 +199,22 @@
 							
 							</p>
 						</div>
-						
-						<div id="LoadGameDiv">
-						
+					</div>
+					
+					<div class="wrapper">
+						<div id="LoadGameDiv" class="content">
+						<p>
+						Here's data about the saved game:
+						</p>
+						<button>Load Game</button>
 						</div>
+					</div>
 						
-						<div id="NewGameDiv">
-						
+					<div class="wrapper">
+						<div id="NewGameDiv" class="content">
+						<button>Start New Game</button>
 						</div>
+					</div>
 				</div>
 			</template>
 			
@@ -252,12 +261,16 @@
 			
 			<template is="dom-if" if="[[questView_]]">
 				<div class="quest" hidden=[[!display_]]>
-					<p>
-					This is the quest view!<br>
-					It's responsible for showing the user their overall goal, as well as
-					various statistics such as time spent playing and total number of pages
-					visited.
-					</p>
+					<div class="wrapper">
+						<div class="content">
+							<p>
+							This is the quest view!<br>
+							It's responsible for showing the user their overall goal, as well as
+							various statistics such as time spent playing and total number of pages
+							visited.
+							</p>
+						</div>
+					</div>
 				</div>
 		</template>
 		
