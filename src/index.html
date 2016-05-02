@@ -60,6 +60,10 @@
 			
 			next();
 		});
+		page('*', function(context,next){
+			context.handled = true;
+		// Can try to catch debug issues here.
+		});
 	
     page('/explore/:wikiPageName', function (context, next) {
 			context.handled = true;
