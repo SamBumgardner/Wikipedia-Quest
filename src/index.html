@@ -19,18 +19,7 @@
   
   <script>
     (function () {
-	  page('/', function(context, next){
-			context.handled = true;
-			
-			//For if the user navigated back to the index using the back button.
-			//returns to the main menu.
-			
-			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
-				document.getElementsByTagName('wikipedia-quest')[0].loadMainMenu_();
-			}
-			
-			next();
-	  });
+	  
 		
 		page('/menu', function (context, next) {
 			context.handled = true;
@@ -57,6 +46,18 @@
 			
 			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
 				document.getElementsByTagName('wikipedia-quest')[0].loadWikiPage_();
+			}
+			
+			next();
+		});
+		page('/', function(context, next){
+			context.handled = true;
+			
+			//For if the user navigated back to the index using the back button.
+			//returns to the main menu.
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadMainMenu_();
 			}
 			
 			next();
