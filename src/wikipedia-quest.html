@@ -74,7 +74,6 @@
 			div.explore div{
 				box-sizing: border-box;
 				float: left;
-				max-height:600px;
 				padding: 5px;
 				overflow:hidden;
 			}
@@ -83,7 +82,6 @@
 				background-color: #333;
 				box-sizing: border-box;
 				float: left;
-				max-height:490px;
 				padding: 5px;
 				overflow:hidden;
 				width:100%;
@@ -91,32 +89,47 @@
 			div.content{
 				box-sizing: border-box;
 				float: left;
-				max-height:600px;
 				padding: 5px;
 				background-color:#F1f1d4;
 				overflow:hidden;
 				width: 100%;
 			}
+			div.startGame{
+				width:50%;
+			}
+			div.startGame div{
+				min-height:300px;
+			}
+			div.menu div h2{
+				text-align:center;
+			}
+			div.menu div button{
+				display:block;
+				margin:auto;
+			}
+			#newGameButton {
+				margin-top:100px;
+			}
 			#overviewWrapper {
 				width: 75%;
-				height:500px;
+				min-height:500px;
 			}
 			#overviewContent{
-				height:490px;
+				min-height:490px;
 			}
 			#linksWrapper{
 				width: 25%;
-				height:500px;
+				min-height:500px;
 			}
 			#linksContent{
-				height:490px;
+				min-height:490px;
 			}
 			#exploreWrapper{
 				width: 75%;
-				height: 100px;
+				min-height: 100px;
 			}
 			#exploreContent{
-				height: 90px;
+				min-height: 90px;
 			}
 			#exploreLink{
 				display: block;
@@ -145,23 +158,20 @@
 			}
 			#searchWrapper{
 				width: 25%;
-				height: 100px;
+				min-height: 100px;
 			}
 			#searchContent{
-				height:90px;
+				min-height:90px;
 			}
 			#searchButton{
 				box-sizing: border-box;
 				width: 20%;
-			
+				min-width:17px;
 			}
 			#searchText{
 				width: 75%;
 				box-sizing: border-box;
 			}
-			
-			
-			
 			#pageImage{
 				max-width: 200px;
 				margin:auto;
@@ -201,18 +211,34 @@
 						</div>
 					</div>
 					
-					<div class="wrapper">
-						<div id="LoadGameDiv" class="content">
-						<p>
-						Here's data about the saved game:
-						</p>
-						<button>Load Game</button>
+					<div class="wrapper startGame">
+						<div id="loadGameDiv" class="content">
+						<h2>Load Game</h2>
+						<p><strong>Current Page:</strong> [[currentWikiPage]]</p>
+						<p><strong>Destination:</strong></p>
+						<p><strong>Number of pages visited:</strong></p>
+						<p><strong>Total time elapsed:</strong></p>
+						<button id="loadButton">Load Game</button>
 						</div>
 					</div>
 						
-					<div class="wrapper">
+					<div class="wrapper startGame">
 						<div id="NewGameDiv" class="content">
-						<button>Start New Game</button>
+						<h2>New Game</h2>
+						<button id="newGameButton">Start New Game</button>
+						</div>
+					</div>
+					
+					<div class="wrapper">
+						<div class="content">
+							<h2>Save Game</h2>
+							<p>
+							<strong>WARNING:</strong>
+							This will overwrite any old save data, so
+							don't do this if you still want to load the current
+							saved game.
+							</p>
+							<button id="saveButton">Save Game</button>
 						</div>
 					</div>
 				</div>
