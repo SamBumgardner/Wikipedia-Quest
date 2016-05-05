@@ -107,19 +107,6 @@
 				display:block;
 				margin:auto;
 			}
-			img.arrows{
-				max-width: 50px;
-				width: 6%;
-				margin-top: 215px;
-				margin-bottom: 215px;
-				display:block;
-				float:left;
-			}
-			div.quest iframe{
-				display:block;
-				float:left;
-				width: 65%;
-			}
 			p.questText{
 				text-align: center;
 				font-size:24pt;
@@ -194,15 +181,8 @@
 				width: 75%;
 				box-sizing: border-box;
 			}
-			#leftArrow{
-				margin-right: 1%;
-				margin-left: 10%;
-			}
-			#rightArrow{
-				margin-left: 1%;
-				margin-right: 10%;
-			}
 		</style>
+		
   <header>
 	<div id="title">
 	<h1>Wikipedia Quest</h1>
@@ -352,10 +332,7 @@
 					</div>
 					<div class="wrapper">
 						<div class="content">
-							<h2>Questing Music</h2>
-							<img id="leftArrow" class="arrows" src="images\\LeftArrow.png"/>
-							<iframe width="640" height="480" src="https://www.youtube.com/embed/WgXqGBcGdX8" frameborder="0" allowfullscreen></iframe>
-							<img id="rightArrow" class="arrows" src="images\\RightArrow.png"/>
+							<questing-music-player></questing-music-player>
 						</div>
 					</div>
 				</div>
@@ -439,7 +416,7 @@
 				value: ""
 			},
 
-			
+
 			errorMsg: {
 				type: String,
 				value: "An error occurred."
