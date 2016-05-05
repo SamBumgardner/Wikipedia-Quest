@@ -319,6 +319,12 @@
 							<h2>Total Time Elapsed</h2>
 						</div>
 					</div>
+					<div class="wrapper">
+						<div class="content">
+							<h2>Questing Music</h2>
+							<iframe width="640" height="480" src="https://www.youtube.com/embed/WgXqGBcGdX8" frameborder="0" allowfullscreen></iframe>
+						</div>
+					</div>
 				</div>
 		</template>
 		
@@ -423,164 +429,168 @@
       this.welcomeUser_();
     },
 	  
-	  welcomeUser_: function(){
-			this.loading_ = true;
-			this.display_ = false;
-			this.mainMenuView_ = true;
-			this.exploreView_ = false;
-			this.questView_ = false;
-			
-			//Check if the browser has save data stored in it.
-			//If so, set the proper values, which are used by menu's html.
-			
-			//If not, set any necessary values, which are also used by menu's html.
-			
-			this.currentWikiPage = "Bacon";
-			
-			this.loading_ = false;
-			this.display_ = true;
-	  },
+	welcomeUser_: function(){
+		this.loading_ = true;
+		this.display_ = false;
+		this.mainMenuView_ = true;
+		this.exploreView_ = false;
+		this.questView_ = false;
+		
+		//Check if the browser has save data stored in it.
+		//If so, set the proper values, which are used by menu's html.
+		
+		//If not, set any necessary values, which are also used by menu's html.
+		
+		this.currentWikiPage = "Bacon";
+		
+		this.loading_ = false;
+		this.display_ = true;
+	},
 	  
-		beginNewGame_: function(){
-			//Do all of the javascript-side setup for a new game:
-			// Select two random pages
-			// Make sure that all of the proper variables are initialized to zero.
-			loadQuestView_();
-		},
+	beginNewGame_: function(){
+		//Do all of the javascript-side setup for a new game:
+		// Select two random pages
+		// Make sure that all of the proper variables are initialized to zero.
+		loadQuestView_();
+	},
 
-		loadQuestView_: function(){
-			this.loading_ = true;
-			this.display_ = false;
-			this.mainMenuView_ = false;
-			this.exploreView_ = false;
-			this.questView_ = true;
+	loadQuestView_: function(){
+		this.loading_ = true;
+		this.display_ = false;
+		this.mainMenuView_ = false;
+		this.exploreView_ = false;
+		this.questView_ = true;
+	
+	
 		
-		
+		this.loading_ = false;
+		this.display_ = true;
+	},
+	
+	
+	// loadMainMenu_()
+	//
+	// Responsible for:
+	//	Changing boolean values to display the menu view. - COMPLETE
+	
+	loadMainMenu_: function(){
+		this.loading_ = true;
+		this.display_ = false;
+		this.mainMenuView_ = true;
+		this.exploreView_ = false;
+		this.questView_ = false;
 			
-			this.loading_ = false;
-			this.display_ = true;
-		},
-		
-		loadMainMenu_: function(){
-			this.loading_ = true;
-			this.display_ = false;
-			this.mainMenuView_ = true;
-			this.exploreView_ = false;
-			this.questView_ = false;
-			
+		this.loading_ = false;
+		this.display_ = true;
+	},
 
-			
-			this.loading_ = false;
-			this.display_ = true;
-		},
-
-		attributeChanged: function (name, type) {
-			if (/^currentWikiPage$/i.test(name)) {
-				this.loadWikiPage_();
-			}
-		},
-	  
-		loadWikiPage_: function () {
-			this.loading_ = true;
-			this.display_ = false;
-			this.error_ = false;
-			this.mainMenuView_ = false;
-			this.exploreView_ = true;
-			this.questView_ = false;
-		
-			this.pageSummary = 	"Bacon is a meat product prepared from a pig and usually cured. " +
-								"It is first cured using large quantities of salt, either in a " +
-								"brine or in a dry packing; the result is fresh bacon (also known " +
-								"as green bacon). Fresh bacon may then be further dried for weeks " +
-								"or months in cold air, or it may be boiled or smoked. Fresh and " +
-								"dried bacon is typically cooked before eating, often by frying. " +
-								"Boiled bacon is ready to eat, as is some smoked bacon, but may be " +
-								"cooked further before eating.";
-								
-			this.pageImageURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
-	    
-			//Make a call to the mediaWiki API here.
-			/*
-			 {}.bind(this))
-					.catch((function (err) {
-				if(err.message === "server500Error"){
-				this.errorMsg = "A server error occurred. Sorry!";
-				this.error_ = true;
-			}
-			if(err.message === "server404Error"){
-				this.errorMsg = "We have no data for that date.";
-				this.error_ = true;
-			}
-						if(err.message === "invalidDate"){
-				this.errorMsg = "The submitted date was invalid.";
-				this.error_ = true;
-			}
-			this.loading_ = false;
-			this.display_ = false;
-			
-					}).bind(this));
-			*/
-		
-			this.loading_ = false;
-			this.display_ = true;
-		},
-	  
-	  removeAllLinks: function() {
-		//Same idea, but remove links instead.
-		/*var Ul = this.$.listOfEvents;
-		
-		while(Ul.firstChild != null){
-			Ul.firstChild.remove();
-		}*/
-	  },
-	  
-	  insertAllEvents: function() {
-		//Add links with the wiki names
-		//The links will go to the page routing, though.
-		
+	attributeChanged: function (name, type) {
+		if (/^currentWikiPage$/i.test(name)) {
+			this.loadWikiPage_();
+		}
+	},
+  
+	loadWikiPage_: function () {
+		this.loading_ = true;
+		this.display_ = false;
+		this.error_ = false;
+		this.mainMenuView_ = false;
+		this.exploreView_ = true;
+		this.questView_ = false;
+	
+		this.pageSummary = 	"Bacon is a meat product prepared from a pig and usually cured. " +
+							"It is first cured using large quantities of salt, either in a " +
+							"brine or in a dry packing; the result is fresh bacon (also known " +
+							"as green bacon). Fresh bacon may then be further dried for weeks " +
+							"or months in cold air, or it may be boiled or smoked. Fresh and " +
+							"dried bacon is typically cooked before eating, often by frying. " +
+							"Boiled bacon is ready to eat, as is some smoked bacon, but may be " +
+							"cooked further before eating.";
+							
+		this.pageImageURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+	
+		//Make a call to the mediaWiki API here.
 		/*
-		var Ul = this.$.listOfEvents;
-
-		if(this.eventList){
-			for( var i = 0; i < this.eventList.length ; i++){
-
-			  
-			  var newListElement = document.createElement("li");
-			  var newParagraph = document.createElement("p"); 
-			  var newLink = document.createElement("a");
-			  
-			  newParagraph.innerHTML = this.formatStartTime(this.eventList[i]);
-			  newLink.href = this.getMoreInfoLink(this.eventList[i].link);
-			  newLink.innerHTML = this.eventList[i].title.$t;
-			  
-			  newParagraph.appendChild(newLink);
-			  newListElement.appendChild(newParagraph);
-			  
-			  
-			  Ul.appendChild(newListElement);
-			}
+		 {}.bind(this))
+				.catch((function (err) {
+			if(err.message === "server500Error"){
+			this.errorMsg = "A server error occurred. Sorry!";
+			this.error_ = true;
 		}
-		else{
-			throw new Error("invalidDate");
+		if(err.message === "server404Error"){
+			this.errorMsg = "We have no data for that date.";
+			this.error_ = true;
 		}
+					if(err.message === "invalidDate"){
+			this.errorMsg = "The submitted date was invalid.";
+			this.error_ = true;
+		}
+		this.loading_ = false;
+		this.display_ = false;
+		
+				}).bind(this));
 		*/
-		
-	  },
-      getMoreInfoLink: function (links) {
-		//Can use the same idea to generate the hrefs for the wiki links.
-		
-		/*if (!links || links.length < 1) {
-          return '#';
-        }
+	
+		this.loading_ = false;
+		this.display_ = true;
+	},
+	  
+	removeAllLinks: function() {
+	//Same idea, but remove links instead.
+	/*var Ul = this.$.listOfEvents;
 
-        for (var i = 0; i < links.length; i++) {
-          if (links[i].rel === 'alternate' && links[i].type === 'text/html') {
-            return links[i].href;
-          }
-        }
+	while(Ul.firstChild != null){
+		Ul.firstChild.remove();
+	}*/
+	},
 
-        return '#'; */
-      }
-    });
+	insertAllEvents: function() {
+	//Add links with the wiki names
+	//The links will go to the page routing, though.
+
+	/*
+	var Ul = this.$.listOfEvents;
+
+	if(this.eventList){
+		for( var i = 0; i < this.eventList.length ; i++){
+
+		  
+		  var newListElement = document.createElement("li");
+		  var newParagraph = document.createElement("p"); 
+		  var newLink = document.createElement("a");
+		  
+		  newParagraph.innerHTML = this.formatStartTime(this.eventList[i]);
+		  newLink.href = this.getMoreInfoLink(this.eventList[i].link);
+		  newLink.innerHTML = this.eventList[i].title.$t;
+		  
+		  newParagraph.appendChild(newLink);
+		  newListElement.appendChild(newParagraph);
+		  
+		  
+		  Ul.appendChild(newListElement);
+		}
+	}
+	else{
+		throw new Error("invalidDate");
+	}
+	*/
+
+	},
+	getMoreInfoLink: function (links) {
+	//Can use the same idea to generate the hrefs for the wiki links.
+
+	/*if (!links || links.length < 1) {
+	  return '#';
+	}
+
+	for (var i = 0; i < links.length; i++) {
+	  if (links[i].rel === 'alternate' && links[i].type === 'text/html') {
+		return links[i].href;
+	  }
+	}
+
+	return '#'; */
+	}
+	});
   </script>
 </dom-module>
