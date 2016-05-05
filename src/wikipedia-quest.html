@@ -129,7 +129,7 @@
 				min-height: 100px;
 			}
 			#exploreContent{
-				min-height: 90px;
+				min-height: 100px;
 			}
 			#exploreLink{
 				display: block;
@@ -161,7 +161,7 @@
 				min-height: 100px;
 			}
 			#searchContent{
-				min-height:90px;
+				min-height:100px;
 			}
 			#searchButton{
 				box-sizing: border-box;
@@ -214,10 +214,10 @@
 					<div class="wrapper startGame">
 						<div id="loadGameDiv" class="content">
 						<h2>Load Game</h2>
-						<p><strong>Current Page:</strong> [[currentWikiPage]]</p>
-						<p><strong>Destination:</strong></p>
-						<p><strong>Number of pages visited:</strong></p>
-						<p><strong>Total time elapsed:</strong></p>
+						<p><strong>Current Page:</strong> [[savedCurrentWikiPage]]</p>
+						<p><strong>Destination:</strong> [[savedDestination]]</p>
+						<p><strong>Number of pages visited:</strong> [[savedNumPagesVisited]]</p>
+						<p><strong>Total time elapsed:</strong> [[savedAdditionalTime]]</p>
 						<button id="loadButton">Load Game</button>
 						</div>
 					</div>
@@ -313,10 +313,60 @@
       
 		properties: {
 		
-			currentWikiPage: String,
-			pageSummary: String,
-			pageImageURL: String,
-			errorMsg: String,
+			currentWikiPage: {
+				type: String,
+				value: ""
+			},
+			destination: {
+				type: String,
+				value: ""
+			},
+			numPagesVisited: {
+				type: Number,
+				value: 0
+			},
+			startTime: {
+				type: Number,
+				value: 0
+			},
+			additionalTime: {
+				type: Number,
+				value: 0
+			},
+			
+			
+			savedCurrentWikiPage: {
+				type: String,
+				value: "???"
+			},
+			savedDestination: {
+				type: String,
+				value: "???"
+			},
+			savedNumPagesVisited:{
+				type: Number,
+				value: 0
+			},
+			savedAdditionalTime:{
+				type: Number,
+				value: 0
+			},
+			
+			
+			pageSummary: {
+				type: String,
+				value: ""
+			},
+			pageImageURL: {
+				type: String,
+				value: ""
+			},
+
+			
+			errorMsg: {
+				type: String,
+				value: "An error occurred."
+			},
 			playerInitialized_: {
 				type: Boolean,
 				value: false
