@@ -126,17 +126,17 @@
 			}
 			#exploreWrapper{
 				width: 75%;
-				min-height: 100px;
+				min-height: 150px;
 			}
 			#exploreContent{
-				min-height: 100px;
+				min-height: 150px;
 			}
 			#exploreLink{
 				display: block;
 				text-align: center;
 				padding-top: 15px;
 				padding-bottom: 15px;
-				margin: 16px;
+				margin-top: 45px;
 				
 				width: 200px;
 				margin-left: auto;
@@ -158,10 +158,10 @@
 			}
 			#searchWrapper{
 				width: 25%;
-				min-height: 100px;
+				min-height: 150px;
 			}
 			#searchContent{
-				min-height:100px;
+				min-height:150px;
 			}
 			#searchButton{
 				box-sizing: border-box;
@@ -275,13 +275,15 @@
 
 					<div id="exploreWrapper" class="wrapper">
 						<div id="exploreContent" class="content">
-							<a id="exploreLink" href="http://en.wikipedia.org/wiki/Bacon" target="_blank">Explore Further!</a>
+							<a id="exploreLink" href="http://en.wikipedia.org/wiki/Bacon" target="_blank">
+							Explore Further!</a>
 						</div>
 					</div>
 
 					<div id="searchWrapper" class="wrapper">
 						<div id="searchContent" class="content">
-							<p>Discover a different path:</p>
+							<p>Type in the name of an article that <strong>[[currentWikiPage]]</strong>
+							links to and discover a different path.</p>
 							<input id="searchText" type="text"></input>
 							<button id="searchButton">Go!</button>
 						</div>
