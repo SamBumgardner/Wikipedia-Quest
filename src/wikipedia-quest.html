@@ -107,6 +107,28 @@
 				display:block;
 				margin:auto;
 			}
+			img.arrows{
+				max-width: 50px;
+				width: 6%;
+				margin-top: 215px;
+				margin-bottom: 215px;
+				display:block;
+				float:left;
+			}
+			div.quest iframe{
+				display:block;
+				float:left;
+				width: 65%;
+			}
+			p.questText{
+				text-align: center;
+				font-size:24pt;
+			}
+			.pageImage{
+				max-width: 200px;
+				margin:auto;
+				display: block;
+			}
 			#newGameButton {
 				margin-top:100px;
 			}
@@ -172,10 +194,13 @@
 				width: 75%;
 				box-sizing: border-box;
 			}
-			#pageImage{
-				max-width: 200px;
-				margin:auto;
-				display: block;
+			#leftArrow{
+				margin-right: 1%;
+				margin-left: 10%;
+			}
+			#rightArrow{
+				margin-left: 1%;
+				margin-right: 10%;
 			}
 		</style>
   <header>
@@ -256,7 +281,7 @@
 						<div id="overviewContent" class="content">
 							<h2>[[currentWikiPage]]</h2>
 							<p id="pageSummary">[[pageSummary]]</p>
-							<img id="pageImage" src="[[pageImageURL]]"/>
+							<img class="pageImage" src="[[pageImageURL]]"/>
 						</div>
 					</div>
 
@@ -302,27 +327,35 @@
 					<div class="wrapper halfSize">
 						<div class="content">
 							<h2>Origin</h2>
+							<p class="questText">[[origin]]</p>
+							<img class="pageImage" src="[[originImg]]"/>
 						</div>
 					</div>
 					<div class="wrapper halfSize">
 						<div class="content">
 							<h2>Destination</h2>
+							<p class="questText">[[destination]]</p>
+							<img class="pageImage" src="[[destinationImg]]"/>
 						</div>
 					</div>
 					<div class="wrapper">
 						<div class="content">
 							<h2>Number of Pages Visited</h2>
+							<p class="questText">[[numPagesVisited]]</p>
 						</div>
 					</div>
 					<div class="wrapper">
 						<div class="content">
 							<h2>Total Time Elapsed</h2>
+							<p class="questText">[[totalTime]]</p>
 						</div>
 					</div>
 					<div class="wrapper">
 						<div class="content">
 							<h2>Questing Music</h2>
+							<img id="leftArrow" class="arrows" src="images\\LeftArrow.png"/>
 							<iframe width="640" height="480" src="https://www.youtube.com/embed/WgXqGBcGdX8" frameborder="0" allowfullscreen></iframe>
+							<img id="rightArrow" class="arrows" src="images\\RightArrow.png"/>
 						</div>
 					</div>
 				</div>
@@ -345,9 +378,21 @@
 				type: String,
 				value: ""
 			},
+			origin:{
+				type: String,
+				value: "???"
+			},
+			originImg:{
+				type: String,
+				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+			},
 			destination: {
 				type: String,
-				value: ""
+				value: "???"
+			},
+			destinationImg:{
+				type: String,
+				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
 			},
 			numPagesVisited: {
 				type: Number,
@@ -360,6 +405,10 @@
 			additionalTime: {
 				type: Number,
 				value: 0
+			},
+			totalTime:{
+				type: String,
+				value: "00:00"
 			},
 			
 			
