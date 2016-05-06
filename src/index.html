@@ -50,6 +50,15 @@
 			
 			next();
 		});
+		page('/explore/:wikiPageName', function (context, next) {
+			context.handled = true;
+			//Changes wiki page for the adventure view.
+			// In the adventure view, checks if this matches where
+			// the player should be.
+			changeWikiPage(context.params.wikiPageName);
+			
+      next();
+    });
 		page('/', function(context, next){
 			context.handled = true;
 			
@@ -67,22 +76,11 @@
 		// Can try to catch debug issues here.
 		});
 	
-    page('/explore/:wikiPageName', function (context, next) {
-			context.handled = true;
-		
-			//Changes wiki page for the adventure view.
-			// In the adventure view, checks if this matches where
-			// the player should be.
-			
-			changeWikiPage(context.wikiPageName);
-			
-      next();
-    });
+    
 
     
 		
 	function changeWikiPage(pageName) {
-		
 		if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
 			document.getElementsByTagName('wikipedia-quest')[0].setAttribute('current_wiki_page', pageName);
 		}
