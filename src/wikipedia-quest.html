@@ -73,11 +73,11 @@
 				margin: auto;
 			}
 			
+			
 			div.explore div{
 				box-sizing: border-box;
 				float: left;
 				padding: 5px;
-				overflow:hidden;
 			}
 			
 			div.wrapper{
@@ -93,14 +93,14 @@
 				float: left;
 				padding: 5px;
 				background-color:#F1f1d4;
-				overflow:hidden;
+				overflow-y:auto;
 				width: 100%;
 			}
 			div.halfSize{
 				width:50%;
 			}
 			div.halfSize div{
-				min-height:300px;
+				height:300px;
 			}
 			h2{
 				text-align:center;
@@ -127,27 +127,27 @@
 			}
 			#overviewWrapper {
 				width: 75%;
-				min-height:500px;
+				height:500px;
 			}
 			#overviewContent{
-				min-height:490px;
+				height:490px;
 			}
 			#linksWrapper{
 				width: 25%;
-				min-height:500px;
+				height:500px;
 			}
 			#linksContent{
-				min-height:490px;
+				height:490px;
 			}
 			#linksContent li{
 				margin-top:20px;
 			}
 			#exploreWrapper{
 				width: 75%;
-				min-height: 150px;
+				height: 150px;
 			}
 			#exploreContent{
-				min-height: 150px;
+				height: 150px;
 			}
 			#exploreLink{
 				display: block;
@@ -176,10 +176,10 @@
 			}
 			#searchWrapper{
 				width: 25%;
-				min-height: 150px;
+				height: 150px;
 			}
 			#searchContent{
-				min-height:150px;
+				height:150px;
 			}
 			#searchButton{
 				box-sizing: border-box;
@@ -365,6 +365,7 @@
 	</div>
    
   </template>
+  <script src="xhrpromise.js"></script>
   <script>
     // element registration
     Polymer({
@@ -383,7 +384,7 @@
 			},
 			origin_img:{
 				type: String,
-				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+				value: ""
 			},
 			destination: {
 				type: String,
@@ -391,7 +392,7 @@
 			},
 			destination_img:{
 				type: String,
-				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+				value: ""
 			},
 			num_pages_visited: {
 				type: Number,
@@ -436,6 +437,10 @@
 			display_saved_additional_time:{
 				type:String,
 				value:"0:0:0"
+			},
+			just_started:{
+				type:Boolean,
+				value: false
 			},
 			
 			
@@ -553,10 +558,7 @@
 		this.display_ = true;
 	},
 	
-	// loadMainMenu_()
-	//
-	// Responsible for:
-	//	Changing boolean values to display the menu view. - COMPLETE
+
 	
 	loadMainMenu_: function(){
 		this.display_ = false;
@@ -580,6 +582,8 @@
 		this.loaded_total_time = this.saved_additional_time;
 		this.main_start_time = Math.floor(Date.now() / 1000);
 		
+		this.just_started = true;
+		
 	},
 	
 	newGame_: function(){
@@ -588,8 +592,6 @@
 		// Make sure that all of the proper variables are initialized to zero.
 		
 		try{
-		
-		//Make API Calls here.
 		
 		this.randomPageRequest();
 		
@@ -602,6 +604,7 @@
 		this.main_start_time = Math.floor(Date.now() / 1000);
 		this.loaded_total_time = 0;
 		this.num_pages_visited = 1;
+		this.just_started = true;
 		
 	},
 	
@@ -656,7 +659,9 @@
             }
 			
             this.origin = data.query.random[0].title;
+			this.origin_changed = true;
 			this.destination = data.query.random[1].title;
+			this.destination_changed = true;
 			this.current_wiki_page = this.origin;
 			
           }).bind(this);
@@ -702,17 +707,11 @@
         return this.get(index, change.base);
     },
 	
-	initializeExplore: function(){
-		
-	},
-	
 	loadWikiPage_: function () {
 		this.error_ = false;
 		this.main_menu_view_ = false;
 		this.explore_view_ = true;
 		this.questView_ = false;
-		
-		console.log(this.wiki_page_changed);
 		
 		if(this.wiki_page_changed){
 			this.display_ = false;
@@ -729,7 +728,12 @@
 	
 	switchWikiPage_: function(newPage){
 		this.current_wiki_page = newPage;
-		this.num_pages_visited++;
+		if(!this.just_started){
+			this.num_pages_visited++;
+		}
+		else{
+			this.just_started = false;
+		}
 		this.overviewApiCall_();
 		this.linksApiCall_();
 	},
@@ -737,15 +741,22 @@
 		//Make API calls here.
 		this.summary_loading_ = true;
 		
-		this.page_summary = 	"Bacon is a meat product prepared from a pig and usually cured. " +
-							"It is first cured using large quantities of salt, either in a " +
-							"brine or in a dry packing; the result is fresh bacon (also known " +
-							"as green bacon). Fresh bacon may then be further dried for weeks " +
-							"or months in cold air, or it may be boiled or smoked. Fresh and " +
-							"dried bacon is typically cooked before eating, often by frying. " +
-							"Boiled bacon is ready to eat, as is some smoked bacon, but may be " +
-							"cooked further before eating.";
-		this.page_image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+		
+		getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.current_wiki_page)
+			.then((function (data) {
+				this.page_summary = data.extract;
+				if( data.thumbnail ){
+					this.page_image_url = data.thumbnail.source;
+				}
+				else{
+					this.page_image_url = "\\images\\noImage.png";
+				}
+				
+				this.sumary_loading_ = false;
+			}).bind(this));
+		
+		
+		
 	
 	
 	//Make a call to the mediaWiki API here.
@@ -770,7 +781,6 @@
 				}).bind(this));
 		*/
 		
-		this.summary_loading_ = false;
 	
 	},
 	linksApiCall_: function(){
@@ -850,7 +860,37 @@
 		this.main_menu_view_ = false;
 		this.explore_view_ = false;
 		this.questView_ = true;
+		
+		if(this.origin_changed){
+			console.log("hi");
+			getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.origin)
+			.then((function (data) {
+				if( data.thumbnail ){
+					this.origin_img = data.thumbnail.source;
+				}
+				else{
+					this.origin_img = "\\images\\noImage.png";
+				}
+			}).bind(this));
+			
+		}
+		if(this.destination_changed){
+			console.log("hi");
+			
+			getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.destination)
+			.then((function (data) {
 
+				if( data.thumbnail ){
+					this.destination_img = data.thumbnail.source;
+				}
+				else{
+					this.destination_img = "\\images\\noImage.png";
+				}
+			}).bind(this));
+			
+		}
+		
+		
 		this.display_ = true;
 	},
 	});
