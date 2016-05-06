@@ -42,6 +42,8 @@
     },
 	
 	recalcTime: function(){
+		// Full disclosure, this is largely taken from a stack overflow thread.
+		// I made a few tweaks, but it's mostly the same.
 		//Based off of system times, so isn't subject to execution delays.
 		var now = Math.floor(Date.now() / 1000);
 		var diff = now + this.loaded_time - this.start_time;
