@@ -69,69 +69,83 @@
 			}
 			
 			
+			div.explore .loader{
+				margin-top:150px;
+			}
+			div.quest .loader{
+				margin-top: 100px;
+			}
+			
 			.loader {
-			  font-size: 10px;
-			  margin: 50px auto;
-			  text-indent: -9999em;
-			  width: 11em;
-			  height: 11em;
+			
+			  margin-left:48%;
+			  font-size: 25px;
+			  width: 1em;
+			  height: 1em;
 			  border-radius: 50%;
-			  background: #ffffff;
-			  background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-			  background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-			  background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-			  background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-			  background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
 			  position: relative;
-			  -webkit-animation: load3 1.4s infinite linear;
-			  animation: load3 1.4s infinite linear;
+			  text-indent: -9999em;
+			  -webkit-animation: load5 1.1s infinite ease;
+			  animation: load5 1.1s infinite ease;
 			  -webkit-transform: translateZ(0);
 			  -ms-transform: translateZ(0);
 			  transform: translateZ(0);
 			}
-			.loader:before {
-			  width: 50%;
-			  height: 50%;
-			  background: #ffffff;
-			  border-radius: 100% 0 0 0;
-			  position: absolute;
-			  top: 0;
-			  left: 0;
-			  content: '';
-			}
-			.loader:after {
-			  background: #0dc5c1;
-			  width: 75%;
-			  height: 75%;
-			  border-radius: 50%;
-			  content: '';
-			  margin: auto;
-			  position: absolute;
-			  top: 0;
-			  left: 0;
-			  bottom: 0;
-			  right: 0;
-			}
-			@-webkit-keyframes load3 {
-			  0% {
-				-webkit-transform: rotate(0deg);
-				transform: rotate(0deg);
-			  }
+			@-webkit-keyframes load5 {
+			  0%,
 			  100% {
-				-webkit-transform: rotate(360deg);
-				transform: rotate(360deg);
+				box-shadow: 0em -2.6em 0em 0em #ffffff, 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.5), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.7);
+			  }
+			  12.5% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.7), 1.8em -1.8em 0 0em #ffffff, 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.5);
+			  }
+			  25% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.5), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.7), 2.5em 0em 0 0em #ffffff, 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  37.5% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.5), 2.5em 0em 0 0em rgba(100, 100, 100, 0.7), 1.75em 1.75em 0 0em #ffffff, 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  50% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.5), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.7), 0em 2.5em 0 0em #ffffff, -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  62.5% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.5), 0em 2.5em 0 0em rgba(100, 100, 100, 0.7), -1.8em 1.8em 0 0em #ffffff, -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  75% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.5), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.7), -2.6em 0em 0 0em #ffffff, -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  87.5% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.5), -2.6em 0em 0 0em rgba(100, 100, 100, 0.7), -1.8em -1.8em 0 0em #ffffff;
 			  }
 			}
-			@keyframes load3 {
-			  0% {
-				-webkit-transform: rotate(0deg);
-				transform: rotate(0deg);
-			  }
+			@keyframes load5 {
+			  0%,
 			  100% {
-				-webkit-transform: rotate(360deg);
-				transform: rotate(360deg);
+				box-shadow: 0em -2.6em 0em 0em #ffffff, 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.5), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.7);
+			  }
+			  12.5% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.7), 1.8em -1.8em 0 0em #ffffff, 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.5);
+			  }
+			  25% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.5), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.7), 2.5em 0em 0 0em #ffffff, 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  37.5% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.5), 2.5em 0em 0 0em rgba(100, 100, 100, 0.7), 1.75em 1.75em 0 0em #ffffff, 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  50% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.5), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.7), 0em 2.5em 0 0em #ffffff, -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.2), -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  62.5% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.5), 0em 2.5em 0 0em rgba(100, 100, 100, 0.7), -1.8em 1.8em 0 0em #ffffff, -2.6em 0em 0 0em rgba(100, 100, 100, 0.2), -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  75% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.5), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.7), -2.6em 0em 0 0em #ffffff, -1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2);
+			  }
+			  87.5% {
+				box-shadow: 0em -2.6em 0em 0em rgba(100, 100, 100, 0.2), 1.8em -1.8em 0 0em rgba(100, 100, 100, 0.2), 2.5em 0em 0 0em rgba(100, 100, 100, 0.2), 1.75em 1.75em 0 0em rgba(100, 100, 100, 0.2), 0em 2.5em 0 0em rgba(100, 100, 100, 0.2), -1.8em 1.8em 0 0em rgba(100, 100, 100, 0.5), -2.6em 0em 0 0em rgba(100, 100, 100, 0.7), -1.8em -1.8em 0 0em #ffffff;
 			  }
 			}
+
 
 			
 			
@@ -170,7 +184,7 @@
 			div.halfSize{
 				width:50%;
 			}
-			div.halfSize div{
+			div.halfSize div.content{
 				height:300px;
 			}
 			h2{
@@ -339,27 +353,36 @@
 			
 					<div id="overviewWrapper" class="wrapper">
 						<div id="overviewContent" class="content">
-							<h2>[[current_wiki_page]]</h2>
-							<p id="page_summary">[[page_summary]]</p>
-							<img class="pageImage" src="[[page_image_url]]"/>
+							<div hidden=[[!display_overview_]]>
+								<h2>[[current_wiki_page]]</h2>
+								<p id="page_summary">[[page_summary]]</p>
+								<img class="pageImage" src="[[page_image_url]]"/>
+							</div>
+							<div class="loader" hidden=[[!loading_overview_]]>Loading...</div>
+							<div class="error" hidden=[[!error_overview_]]></div>
 						</div>
 					</div>
 
 					<div id="linksWrapper" class="wrapper">
 						<div id="linksContent" class="content">
-							<p>Obvious paths lead to...</p>
-							<ul>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 0)]]">[[arrayItem(small_links_array.*, 0)]]</a></li>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 1)]]">[[arrayItem(small_links_array.*, 1)]]</a></li>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 2)]]">[[arrayItem(small_links_array.*, 2)]]</a></li>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 3)]]">[[arrayItem(small_links_array.*, 3)]]</a></li>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 4)]]">[[arrayItem(small_links_array.*, 4)]]</a></li>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 5)]]">[[arrayItem(small_links_array.*, 5)]]</a></li>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 6)]]">[[arrayItem(small_links_array.*, 6)]]</a></li>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 7)]]">[[arrayItem(small_links_array.*, 7)]]</a></li>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 8)]]">[[arrayItem(small_links_array.*, 8)]]</a></li>
-								<li><a href="/explore/[[arrayItem(small_links_array.*, 9)]]">[[arrayItem(small_links_array.*, 9)]]</a></li>
-							</ul>
+							<div hidden=[[!display_links_]]>
+								<p>Obvious paths lead to...</p>
+								<ul>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 0)]]">[[arrayItem(small_links_array.*, 0)]]</a></li>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 1)]]">[[arrayItem(small_links_array.*, 1)]]</a></li>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 2)]]">[[arrayItem(small_links_array.*, 2)]]</a></li>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 3)]]">[[arrayItem(small_links_array.*, 3)]]</a></li>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 4)]]">[[arrayItem(small_links_array.*, 4)]]</a></li>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 5)]]">[[arrayItem(small_links_array.*, 5)]]</a></li>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 6)]]">[[arrayItem(small_links_array.*, 6)]]</a></li>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 7)]]">[[arrayItem(small_links_array.*, 7)]]</a></li>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 8)]]">[[arrayItem(small_links_array.*, 8)]]</a></li>
+									<li><a href="/explore/[[arrayItem(small_links_array.*, 9)]]">[[arrayItem(small_links_array.*, 9)]]</a></li>
+								</ul>
+							</div>
+							<div class="loader" hidden=[[!loading_links_]]>Loading...</div>
+							<div class="error" hidden=[[!error_links_]]></div>
+							
 						</div>
 					</div>
 
@@ -391,16 +414,30 @@
 					</div>
 					<div class="wrapper halfSize">
 						<div class="content">
+							
 							<h2>Origin</h2>
-							<p class="questText">[[origin]]</p>
-							<img class="pageImage" src="[[origin_img]]"/>
+							<div hidden=[[!display_origin_]]>
+								<p class="questText">[[origin]]</p>
+								<img class="pageImage" src="[[origin_img]]"/>
+							</div>
+							
+							<div class="loader" hidden=[[!loading_origin_]]>Loading...</div>
+							<div hidden=[[!error_origin_]]></div>
+							
 						</div>
 					</div>
 					<div class="wrapper halfSize">
 						<div class="content">
+							
 							<h2>Destination</h2>
-							<p class="questText">[[destination]]</p>
-							<img class="pageImage" src="[[destination_img]]"/>
+							<div hidden=[[!display_destination_]]>
+								<p class="questText">[[destination]]</p>
+								<img class="pageImage" src="[[destination_img]]"/>
+							</div>
+							
+							<div class="loader" hidden=[[!loading_destination_]]>Loading...</div>
+							<div hidden=[[!error_destination_]]></div>
+						
 						</div>
 					</div>
 					<div class="wrapper">
@@ -552,28 +589,67 @@
 				value: "An error occurred."
 			},
 			
-			summary_loading_: {
-				type: Boolean,
-				value: false
-			},
-			links_loading_: {
-				type: Boolean,
-				value: false
-			},
+
 			
-			summary_error_: {
-				type: Boolean,
-				value: false
-			},
-			links_error_: {
-				type: Boolean,
-				value: false
-			},
 			
 			display_: {
 				type: Boolean,
 				value: false
 			},
+			
+			display_overview_:{
+				type: Boolean,
+				value: false
+			},
+			loading_overview_:{
+				type: Boolean,
+				value: false
+			},
+			error_overview_:{
+				type: Boolean,
+				value: false
+			},
+			
+			display_links_:{
+				type: Boolean,
+				value: false
+			},
+			loading_links_: {
+				type: Boolean,
+				value: false
+			},
+			error_links_: {
+				type: Boolean,
+				value: false
+			},
+			
+			display_origin_:{
+				type: Boolean,
+				value: false
+			},
+			loading_origin_: {
+				type: Boolean,
+				value: false
+			},
+			error_origin_: {
+				type: Boolean,
+				value: false
+			},
+			
+			display_destination_:{
+				type: Boolean,
+				value: false
+			},
+			loading_destination_: {
+				type: Boolean,
+				value: false
+			},
+			error_destination_: {
+				type: Boolean,
+				value: false
+			},
+			
+			
 			main_menu_view_:{
 				type: Boolean,
 				value: true
@@ -826,7 +902,8 @@
 	
 	overviewApiCall_: function(){
 		//Make API calls here.
-		this.summary_loading_ = true;
+		this.display_overview_ = false;
+		this.loading_overview_ = true;
 		
 		
 		getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.current_wiki_page)
@@ -839,14 +916,19 @@
 					this.page_image_url = "\\images\\noImage.png";
 				}
 				
-				this.sumary_loading_ = false;
+				
+				this.loading_overview_ = false;
+				this.display_overview_ = true;
+
+				
 			}).bind(this));
 
 	},
 	
 	linksApiCall_: function(){
 		//Make API calls here.
-		this.links_loading_ = true;
+		this.display_links_ = false;
+		this.loading_links_ = true;
 		
 		
 		var callbackName = "linksRequestCallback" + Math.round((Math.random() * 100));
@@ -854,24 +936,32 @@
           window[name] = (function (data) {
             if (name !== callbackName || !data || !data.query || !data.query.pages) {
 			  console.log("An error occurred!");
-			  this.links_loading_ = false;
-			  this.links_error_ = true;
+			  this.loading_links_ = false;
+			  this.error_links_ = true;
 			  
               return;
             }
 			var pageId = Object.keys(data.query.pages)[0]
-			this.full_links_array = this.shuffle(data.query.pages[pageId].links);
-			for(var i = 0; i < 10; i++){
-				if( i < this.full_links_array.length ){
-					this.set("small_links_array." + i,  this.full_links_array[i].title);
-				}
-				else{
-					this.set("small_links_array." + i,  "");
+			if(data.query.pages[pageId].links){
+				
+				this.full_links_array = this.shuffle(data.query.pages[pageId].links);
+				for(var i = 0; i < 10; i++){
+					if( i < this.full_links_array.length ){
+						this.set("small_links_array." + i,  this.full_links_array[i].title);
+					}
+					else{
+						this.set("small_links_array." + i,  "");
+					}
 				}
 			}
+			else{
+				this.loading_links_ = false;
+				this.loading_error_ = true;
+				return;
+			}
 			
-			
-			this.links_loading_ = false;
+			this.loading_links_ = false;
+			this.display_links_ = true;
 			
           }).bind(this);
         }).call(this, callbackName);
@@ -933,6 +1023,9 @@
 		this.questView_ = true;
 		
 		if(this.origin_changed){
+			this.display_origin_ = false;
+			this.error_origin_ = false;
+			this.loading_origin_ = true;
 			
 			getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.origin)
 			.then((function (data) {
@@ -942,10 +1035,19 @@
 				else{
 					this.origin_img = "\\images\\noImage.png";
 				}
+				
+				this.loading_origin_ = false;
+				this.display_origin_ = true;
+				
+				this.origin_changed = false;
+				
 			}).bind(this));
 			
 		}
 		if(this.destination_changed){
+			this.display_destination_ = false;
+			this.error_destination_ = true;
+			this.loading_destination_ = true;
 			
 			getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.destination)
 			.then((function (data) {
@@ -956,6 +1058,12 @@
 				else{
 					this.destination_img = "\\images\\noImage.png";
 				}
+				
+				this.loading_destination_ = false;
+				this.display_destination_ = true;
+				
+				this.destination_changed = false;
+				
 			}).bind(this));
 			
 		}
