@@ -529,7 +529,18 @@
 
 	attributeChanged: function (name, type) {
 		if (/^current_wiki_page$/i.test(name)) {
-			this.loadWikiPage_();
+			if(!this.explore_view_){
+				this.wiki_page_changed = true;
+			}
+			if(this.current_wiki_page === this.destination){
+				alert("You won, congratulations!");
+			}
+		}
+		if (/^origin$/i.test(name)) {
+			this.origin_changed = true;
+		}
+		if (/^destination$/i.test(name)) {
+			this.destination_changed = true;
 		}
 	},
   
