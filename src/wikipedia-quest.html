@@ -113,6 +113,10 @@
 				text-align: center;
 				font-size:24pt;
 			}
+			div.halfSize p.questText{
+				text-align: center;
+				font-size:12pt;
+			}
 			.pageImage{
 				max-width: 200px;
 				margin:auto;
@@ -391,7 +395,7 @@
 			},
 			num_pages_visited: {
 				type: Number,
-				value: 1
+				value: 0
 			},
 			
 			
@@ -586,8 +590,8 @@
 		try{
 		
 		//Make API Calls here.
-		var newOrigin = "Random 1";
-		var newDestination = "Random 2";
+		
+		this.randomPageRequest();
 		
 		}catch(err){
 			//An error occurred; Abort! Abort!
@@ -595,10 +599,6 @@
 			return;
 		}
 		
-		this.origin = newOrigin;
-		this.destination = newDestination;
-		
-		this.current_wiki_page = this.origin;
 		this.main_start_time = Math.floor(Date.now() / 1000);
 		this.loaded_total_time = 0;
 		this.num_pages_visited = 1;
@@ -647,7 +647,32 @@
 	},
 
 	
+	randomPageRequest: function(){
+		var callbackName = "pageRequestCallback" + Math.round((Math.random() * 100));
+        (function (name) {
+          window[name] = (function (data) {
+            if (name !== callbackName || !data || !data.query || !data.query.random || data.query.random.length < 2) {
+              return;
+            }
+			
+            this.origin = data.query.random[0].title;
+			this.destination = data.query.random[1].title;
+			this.current_wiki_page = this.origin;
+			
+          }).bind(this);
+        }).call(this, callbackName);
+
 	
+
+        var script = document.createElement('script');
+        script.src = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=random&rnnamespace=0&rnlimit=2&callback=' + callbackName;
+        var scripts = document.getElementsByTagName('script');
+        scripts[0].parentNode.insertBefore(script, scripts[0]);
+        script.onload = function () {
+          this.parentElement.removeChild(this);
+        };
+		
+	},
 	
 	
 
@@ -665,6 +690,8 @@
 		}
 		if (/^origin$/i.test(name)) {
 			this.origin_changed = true;
+			this.current_wiki_page = this.origin;
+			this.wiki_page_changed = true;
 		}
 		if (/^destination$/i.test(name)) {
 			this.destination_changed = true;
@@ -685,8 +712,11 @@
 		this.explore_view_ = true;
 		this.questView_ = false;
 		
+		console.log(this.wiki_page_changed);
+		
 		if(this.wiki_page_changed){
 			this.display_ = false;
+			
 			this.switchWikiPage_(this.current_wiki_page);
 			
 
@@ -706,7 +736,7 @@
 	overviewApiCall_: function(){
 		//Make API calls here.
 		this.summary_loading_ = true;
-			
+		
 		this.page_summary = 	"Bacon is a meat product prepared from a pig and usually cured. " +
 							"It is first cured using large quantities of salt, either in a " +
 							"brine or in a dry packing; the result is fresh bacon (also known " +
