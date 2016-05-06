@@ -72,13 +72,17 @@
 				max-width: 960px;
 				margin: auto;
 			}
-			
+						
+			div.explore ul{
+				list-style-type: none;
+			}
 			
 			div.explore div{
 				box-sizing: border-box;
 				float: left;
 				padding: 5px;
 			}
+
 			
 			div.wrapper{
 				background-color: #333;
@@ -294,7 +298,7 @@
 
 					<div id="exploreWrapper" class="wrapper">
 						<div id="exploreContent" class="content">
-							<a id="exploreLink" href="http://en.wikipedia.org/wiki/[[current_wiki_page]]" target="_blank">
+							<a id="exploreLink" href="http://en.wikipedia.org/wiki/[[current_wiki_page]]?&redirect=no" target="_blank">
 							Explore Further!</a>
 						</div>
 					</div>
@@ -787,15 +791,67 @@
 		//Make API calls here.
 		this.links_loading_ = true;
 		
-		//console.log("About to alter array");
 		
-		for(var i = 0; i < this.small_links_array.length; i++){
-			this.set("small_links_array." + i,  JSON.stringify(Math.random()));
-		}
+		var callbackName = "linksRequestCallback" + Math.round((Math.random() * 100));
+        (function (name) {
+          window[name] = (function (data) {
+            if (name !== callbackName || !data || !data.query || !data.query.pages) {
+			  console.log("An error occurred!");
+			  this.links_loading_ = false;
+			  this.links_error_ = true;
+			  
+              return;
+            }
+			var pageId = Object.keys(data.query.pages)[0]
+			this.full_links_array = this.shuffle(data.query.pages[pageId].links);
+			for(var i = 0; i < 10; i++){
+				if( i < this.full_links_array.length ){
+					this.set("small_links_array." + i,  this.full_links_array[i].title);
+				}
+				else{
+					this.set("small_links_array." + i,  "");
+				}
+			}
+			
+			
+			this.links_loading_ = false;
+			
+          }).bind(this);
+        }).call(this, callbackName);
+
+	
+
+        var script = document.createElement('script');
+        script.src = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=links&list=&titles=' + this.current_wiki_page + '&pllimit=500&callback=' + callbackName;
+        var scripts = document.getElementsByTagName('script');
+        scripts[0].parentNode.insertBefore(script, scripts[0]);
+        script.onload = function () {
+          this.parentElement.removeChild(this);
+        };
 		
-		//console.log(this.small_links_array);
 		
-		this.links_loading_ = false;
+		
+
+		
+		
+	},
+	//this is the Fisher-Yates Shuffle, not mine.
+	shuffle :function(array) {
+	  var m = array.length, t, i;
+
+	  // While there remain elements to shuffle…
+	  while (m) {
+
+		// Pick a remaining element…
+		i = Math.floor(Math.random() * m--);
+
+		// And swap it with the current element.
+		t = array[m];
+		array[m] = array[i];
+		array[i] = t;
+	  }
+
+	  return array;
 	},
 	  
 	removeAllLinks: function() {
@@ -862,7 +918,7 @@
 		this.questView_ = true;
 		
 		if(this.origin_changed){
-			console.log("hi");
+			
 			getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.origin)
 			.then((function (data) {
 				if( data.thumbnail ){
@@ -875,7 +931,6 @@
 			
 		}
 		if(this.destination_changed){
-			console.log("hi");
 			
 			getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.destination)
 			.then((function (data) {
