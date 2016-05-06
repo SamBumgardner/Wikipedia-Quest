@@ -72,13 +72,17 @@
 				max-width: 960px;
 				margin: auto;
 			}
+						
+			div.explore ul{
+				list-style-type: none;
+			}
 			
 			div.explore div{
 				box-sizing: border-box;
 				float: left;
 				padding: 5px;
-				overflow:hidden;
 			}
+
 			
 			div.wrapper{
 				background-color: #333;
@@ -93,14 +97,14 @@
 				float: left;
 				padding: 5px;
 				background-color:#F1f1d4;
-				overflow:hidden;
+				overflow-y:auto;
 				width: 100%;
 			}
 			div.halfSize{
 				width:50%;
 			}
 			div.halfSize div{
-				min-height:300px;
+				height:300px;
 			}
 			h2{
 				text-align:center;
@@ -113,6 +117,10 @@
 				text-align: center;
 				font-size:24pt;
 			}
+			div.halfSize p.questText{
+				text-align: center;
+				font-size:12pt;
+			}
 			.pageImage{
 				max-width: 200px;
 				margin:auto;
@@ -123,27 +131,27 @@
 			}
 			#overviewWrapper {
 				width: 75%;
-				min-height:500px;
+				height:500px;
 			}
 			#overviewContent{
-				min-height:490px;
+				height:490px;
 			}
 			#linksWrapper{
 				width: 25%;
-				min-height:500px;
+				height:500px;
 			}
 			#linksContent{
-				min-height:490px;
+				height:490px;
 			}
 			#linksContent li{
 				margin-top:20px;
 			}
 			#exploreWrapper{
 				width: 75%;
-				min-height: 150px;
+				height: 150px;
 			}
 			#exploreContent{
-				min-height: 150px;
+				height: 150px;
 			}
 			#exploreLink{
 				display: block;
@@ -172,10 +180,10 @@
 			}
 			#searchWrapper{
 				width: 25%;
-				min-height: 150px;
+				height: 150px;
 			}
 			#searchContent{
-				min-height:150px;
+				height:150px;
 			}
 			#searchButton{
 				box-sizing: border-box;
@@ -290,7 +298,7 @@
 
 					<div id="exploreWrapper" class="wrapper">
 						<div id="exploreContent" class="content">
-							<a id="exploreLink" href="http://en.wikipedia.org/wiki/[[current_wiki_page]]" target="_blank">
+							<a id="exploreLink" href="http://en.wikipedia.org/wiki/[[current_wiki_page]]?&redirect=no" target="_blank">
 							Explore Further!</a>
 						</div>
 					</div>
@@ -361,6 +369,7 @@
 	</div>
    
   </template>
+  <script src="xhrpromise.js"></script>
   <script>
     // element registration
     Polymer({
@@ -379,7 +388,7 @@
 			},
 			origin_img:{
 				type: String,
-				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+				value: ""
 			},
 			destination: {
 				type: String,
@@ -387,11 +396,11 @@
 			},
 			destination_img:{
 				type: String,
-				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+				value: ""
 			},
 			num_pages_visited: {
 				type: Number,
-				value: 1
+				value: 0
 			},
 			
 			
@@ -432,6 +441,10 @@
 			display_saved_additional_time:{
 				type:String,
 				value:"0:0:0"
+			},
+			just_started:{
+				type:Boolean,
+				value: false
 			},
 			
 			
@@ -505,6 +518,11 @@
 			questView_:{
 				type: Boolean,
 				value: false
+			},
+			
+			explore_initialized:{
+				type: Boolean,
+				value: false
 			}
     },
 
@@ -520,11 +538,6 @@
 		this.main_menu_view_ = true;
 		this.explore_view_ = false;
 		this.questView_ = false;
-		
-		//Check if the browser has save data stored in it.
-		//If so, set the proper values, which are used by menu's html.
-		
-		//If not, set any necessary values, which are also used by menu's html.
 		
 		
 		this.$$("#loadButton").addEventListener("click", this.loadGame_.bind(this), false);
@@ -549,10 +562,7 @@
 		this.display_ = true;
 	},
 	
-	// loadMainMenu_()
-	//
-	// Responsible for:
-	//	Changing boolean values to display the menu view. - COMPLETE
+
 	
 	loadMainMenu_: function(){
 		this.display_ = false;
@@ -576,6 +586,8 @@
 		this.loaded_total_time = this.saved_additional_time;
 		this.main_start_time = Math.floor(Date.now() / 1000);
 		
+		this.just_started = true;
+		
 	},
 	
 	newGame_: function(){
@@ -585,9 +597,7 @@
 		
 		try{
 		
-		//Make API Calls here.
-		var newOrigin = "Random 1";
-		var newDestination = "Random 2";
+		this.randomPageRequest();
 		
 		}catch(err){
 			//An error occurred; Abort! Abort!
@@ -595,13 +605,10 @@
 			return;
 		}
 		
-		this.origin = newOrigin;
-		this.destination = newDestination;
-		
-		this.current_wiki_page = this.origin;
 		this.main_start_time = Math.floor(Date.now() / 1000);
 		this.loaded_total_time = 0;
 		this.num_pages_visited = 1;
+		this.just_started = true;
 		
 	},
 	
@@ -647,9 +654,39 @@
 	},
 
 	
+	randomPageRequest: function(){
+		var callbackName = "pageRequestCallback" + Math.round((Math.random() * 100));
+        (function (name) {
+          window[name] = (function (data) {
+            if (name !== callbackName || !data || !data.query || !data.query.random || data.query.random.length < 2) {
+              return;
+            }
+			
+            this.origin = data.query.random[0].title;
+			this.origin_changed = true;
+			this.destination = data.query.random[1].title;
+			this.destination_changed = true;
+			this.current_wiki_page = this.origin;
+			
+          }).bind(this);
+        }).call(this, callbackName);
+
 	
+
+        var script = document.createElement('script');
+        script.src = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=random&rnnamespace=0&rnlimit=2&callback=' + callbackName;
+        var scripts = document.getElementsByTagName('script');
+        scripts[0].parentNode.insertBefore(script, scripts[0]);
+        script.onload = function () {
+          this.parentElement.removeChild(this);
+        };
+		
+	},
 	
-	
+	//Used to update the list of links.
+	arrayItem: function(change, index) {
+        return this.get(index, change.base);
+    },
 
 	attributeChanged: function (name, type) {
 		if (/^current_wiki_page$/i.test(name)) {
@@ -665,19 +702,27 @@
 		}
 		if (/^origin$/i.test(name)) {
 			this.origin_changed = true;
+			this.current_wiki_page = this.origin;
+			this.wiki_page_changed = true;
 		}
 		if (/^destination$/i.test(name)) {
 			this.destination_changed = true;
 		}
 	},
 	
-	arrayItem: function(change, index) {
-        return this.get(index, change.base);
-    },
 	
-	initializeExplore: function(){
-		
+	initializeExplore(){
+	//Since the elements of the DOM-if aren't available right away,
+	//I used a timeout to retry the bind until it worked. 
+		try{
+			this.$$("#searchButton").addEventListener("click", this.searchButton_.bind(this), false);
+			this.$$("#searchText").addEventListener("keypress", this.searchBoxEnter_.bind(this), false);
+			this.explore_initialized = true;
+		}catch(err){
+			var t = setTimeout(this.initializeExplore.bind(this), 250);
+		}
 	},
+	
 	
 	loadWikiPage_: function () {
 		this.error_ = false;
@@ -687,11 +732,14 @@
 		
 		if(this.wiki_page_changed){
 			this.display_ = false;
+			
 			this.switchWikiPage_(this.current_wiki_page);
 			
-
 			this.display_ = true;
 			this.wiki_page_changed = false;
+			if(!this.explore_initialized){
+				this.initializeExplore();
+			}
 		}	
 		
 		
@@ -699,120 +747,116 @@
 	
 	switchWikiPage_: function(newPage){
 		this.current_wiki_page = newPage;
-		this.num_pages_visited++;
+		if(!this.just_started){
+			this.num_pages_visited++;
+		}
+		else{
+			this.just_started = false;
+		}
 		this.overviewApiCall_();
 		this.linksApiCall_();
 	},
+	
 	overviewApiCall_: function(){
 		//Make API calls here.
 		this.summary_loading_ = true;
-			
-		this.page_summary = 	"Bacon is a meat product prepared from a pig and usually cured. " +
-							"It is first cured using large quantities of salt, either in a " +
-							"brine or in a dry packing; the result is fresh bacon (also known " +
-							"as green bacon). Fresh bacon may then be further dried for weeks " +
-							"or months in cold air, or it may be boiled or smoked. Fresh and " +
-							"dried bacon is typically cooked before eating, often by frying. " +
-							"Boiled bacon is ready to eat, as is some smoked bacon, but may be " +
-							"cooked further before eating.";
-		this.page_image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
-	
-	
-	//Make a call to the mediaWiki API here.
-		/*
-		 {}.bind(this))
-				.catch((function (err) {
-			if(err.message === "server500Error"){
-			this.error_msg = "A server error occurred. Sorry!";
-			this.error_ = true;
-		}
-		if(err.message === "server404Error"){
-			this.error_msg = "We have no data for that date.";
-			this.error_ = true;
-		}
-					if(err.message === "invalidDate"){
-			this.error_msg = "The submitted date was invalid.";
-			this.error_ = true;
-		}
-		this.loading_ = false;
-		this.display_ = false;
 		
-				}).bind(this));
-		*/
 		
-		this.summary_loading_ = false;
-	
+		getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.current_wiki_page)
+			.then((function (data) {
+				this.page_summary = data.extract;
+				if( data.thumbnail ){
+					this.page_image_url = data.thumbnail.source;
+				}
+				else{
+					this.page_image_url = "\\images\\noImage.png";
+				}
+				
+				this.sumary_loading_ = false;
+			}).bind(this));
+
 	},
+	
 	linksApiCall_: function(){
 		//Make API calls here.
 		this.links_loading_ = true;
 		
-		//console.log("About to alter array");
 		
-		for(var i = 0; i < this.small_links_array.length; i++){
-			this.set("small_links_array." + i,  JSON.stringify(Math.random()));
+		var callbackName = "linksRequestCallback" + Math.round((Math.random() * 100));
+        (function (name) {
+          window[name] = (function (data) {
+            if (name !== callbackName || !data || !data.query || !data.query.pages) {
+			  console.log("An error occurred!");
+			  this.links_loading_ = false;
+			  this.links_error_ = true;
+			  
+              return;
+            }
+			var pageId = Object.keys(data.query.pages)[0]
+			this.full_links_array = this.shuffle(data.query.pages[pageId].links);
+			for(var i = 0; i < 10; i++){
+				if( i < this.full_links_array.length ){
+					this.set("small_links_array." + i,  this.full_links_array[i].title);
+				}
+				else{
+					this.set("small_links_array." + i,  "");
+				}
+			}
+			
+			
+			this.links_loading_ = false;
+			
+          }).bind(this);
+        }).call(this, callbackName);
+
+	
+
+        var script = document.createElement('script');
+        script.src = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=links&list=&titles=' + this.current_wiki_page + '&pllimit=500&callback=' + callbackName;
+        var scripts = document.getElementsByTagName('script');
+        scripts[0].parentNode.insertBefore(script, scripts[0]);
+        script.onload = function () {
+          this.parentElement.removeChild(this);
+        };
+	},
+	//this is the Fisher-Yates Shuffle, not mine.
+	shuffle :function(array) {
+	  var m = array.length, t, i;
+
+	  // While there remain elements to shuffle…
+	  while (m) {
+
+		// Pick a remaining element…
+		i = Math.floor(Math.random() * m--);
+
+		// And swap it with the current element.
+		t = array[m];
+		array[m] = array[i];
+		array[i] = t;
+	  }
+
+	  return array;
+	},
+	
+	searchBoxEnter_: function(evt){
+		if(evt.charCode == 13){
+			this.$$("#searchButton").click();
 		}
-		
-		//console.log(this.small_links_array);
-		
-		this.links_loading_ = false;
 	},
 	  
-	removeAllLinks: function() {
-	//Same idea, but remove links instead.
-	/*var Ul = this.$.listOfEvents;
+	searchButton_: function(){
 
-	while(Ul.firstChild != null){
-		Ul.firstChild.remove();
-	}*/
-	},
-
-	insertAllEvents: function() {
-	//Add links with the wiki names
-	//The links will go to the page routing, though.
-
-	/*
-	var Ul = this.$.listOfEvents;
-
-	if(this.eventList){
-		for( var i = 0; i < this.eventList.length ; i++){
-
-		  
-		  var newListElement = document.createElement("li");
-		  var newParagraph = document.createElement("p"); 
-		  var newLink = document.createElement("a");
-		  
-		  newParagraph.innerHTML = this.formattotal-time(this.eventList[i]);
-		  newLink.href = this.getMoreInfoLink(this.eventList[i].link);
-		  newLink.innerHTML = this.eventList[i].title.$t;
-		  
-		  newParagraph.appendChild(newLink);
-		  newListElement.appendChild(newParagraph);
-		  
-		  
-		  Ul.appendChild(newListElement);
+		for(var i =0 ; i < this.full_links_array.length ; i++ ){
+			if(this.full_links_array[i].title == this.$$("#searchText").value){
+				page("/explore/" + this.full_links_array[i].title);
+				this.$$("#searchText").value = "";
+				return;
+			}
 		}
-	}
-	else{
-		throw new Error("invalidDate");
-	}
-	*/
-
-	},
-	getMoreInfoLink: function (links) {
-	//Can use the same idea to generate the hrefs for the wiki links.
-
-	/*if (!links || links.length < 1) {
-	  return '#';
-	}
-
-	for (var i = 0; i < links.length; i++) {
-	  if (links[i].rel === 'alternate' && links[i].type === 'text/html') {
-		return links[i].href;
-	  }
-	}
-
-	return '#'; */
+		//Getting down here means it wasn't found.
+		alert("ERROR: It looks like that particular article isn't connected the the current one. " +
+			"Make sure that you enter the article name, and NOT the anme of the link that leads to it. " +
+			"Also keep in mind that article names may be case-sensitive.");
 	},
 	
 	loadQuestView_: function(){
@@ -820,7 +864,36 @@
 		this.main_menu_view_ = false;
 		this.explore_view_ = false;
 		this.questView_ = true;
+		
+		if(this.origin_changed){
+			
+			getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.origin)
+			.then((function (data) {
+				if( data.thumbnail ){
+					this.origin_img = data.thumbnail.source;
+				}
+				else{
+					this.origin_img = "\\images\\noImage.png";
+				}
+			}).bind(this));
+			
+		}
+		if(this.destination_changed){
+			
+			getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.destination)
+			.then((function (data) {
 
+				if( data.thumbnail ){
+					this.destination_img = data.thumbnail.source;
+				}
+				else{
+					this.destination_img = "\\images\\noImage.png";
+				}
+			}).bind(this));
+			
+		}
+		
+		
 		this.display_ = true;
 	},
 	});
