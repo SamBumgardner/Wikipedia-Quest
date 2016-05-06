@@ -229,7 +229,7 @@
 						<p><strong>Current Page:</strong> [[saved_current_wiki_page]]</p>
 						<p><strong>Destination:</strong> [[saved_destination]]</p>
 						<p><strong>Number of pages visited:</strong> [[saved_num_pages_visited]]</p>
-						<p><strong>Total time elapsed:</strong> [[saved_additional_time]]</p>
+						<p><strong>Total time elapsed:</strong> [[display_saved_additional_time]]</p>
 						<button id="loadButton">Load Game</button>
 						</div>
 					</div>
@@ -329,7 +329,7 @@
 					<div class="wrapper">
 						<div class="content">
 							<h2>Total Time Elapsed</h2>
-							<total-time start_time="[[main_start_time]]" loaded_time="[[loaded_total_time]]" ></total-time>
+							<total-time id="timer" start_time="[[main_start_time]]" loaded_time="[[loaded_total_time]]" ></total-time>
 						</div>
 					</div>
 					<div class="wrapper">
@@ -341,7 +341,7 @@
 										  "https://www.youtube.com/embed/x-NBfQOAdRI",
 										  "https://www.youtube.com/embed/bl9dP0CJfbQ",
 							              "https://www.youtube.com/embed/vdNpaJwLiZA",
-										  "https://www.youtube.com/embed/WFkGjEut9U4"]'>
+										  "https://www.youtube.com/embed/WFkGjEut9U4"]''>
 							</video-player>
 						</div>
 					</div>
@@ -397,7 +397,10 @@
 			},
 			
 			
-			
+			saved_game_exists: {
+				type: Boolean,
+				value: false
+			},
 			saved_current_wiki_page: {
 				type: String,
 				value: "???"
@@ -417,6 +420,10 @@
 			saved_additional_time:{
 				type: Number,
 				value: 0
+			},
+			display_saved_additional_time:{
+				type:String,
+				value:"0:0:0"
 			},
 			
 			
@@ -475,10 +482,10 @@
     },
 
     attached: function () {
-      this.welcomeUser_();
+      this.initialize_menu();
     },
 	  
-	welcomeUser_: function(){
+	initialize_menu: function(){
 		this.loading_ = true;
 		this.display_ = false;
 		this.main_menu_view_ = true;
@@ -491,16 +498,129 @@
 		//If not, set any necessary values, which are also used by menu's html.
 		
 		this.current_wiki_page = "Bacon";
+		this.origin = "Bacon";
+		this.destination = "Russia";
+		
+		
+		this.$$("#loadButton").addEventListener("click", this.loadGame_.bind(this), false);
+		this.$$("#newGameButton").addEventListener("click", this.newGame_.bind(this), false);
+		this.$$("#saveButton").addEventListener("click", this.saveGame_.bind(this), false);
+		
+		
+		if(localStorage.getItem("wikipedia-quest_saved_game")){
+			
+			var packagedState = JSON.parse(localStorage.getItem("wikipedia-quest_saved_game"));
+			this.saved_current_wiki_page = packagedState.current_wiki_page;
+			this.saved_origin = packagedState.origin;
+			this.saved_destination = packagedState.destination;
+			this.saved_num_pages_visited = packagedState.num_pages_visited;
+			this.saved_additional_time = packagedState.total_time;
+			this.display_saved_additional_time = packagedState.display_total_time;
+			
+			this.saved_game_exists = true;
+		}
 		
 		this.loading_ = false;
 		this.display_ = true;
 	},
+	
+	// loadMainMenu_()
+	//
+	// Responsible for:
+	//	Changing boolean values to display the menu view. - COMPLETE
+	
+	loadMainMenu_: function(){
+		this.display_ = false;
+		this.main_menu_view_ = true;
+		this.explore_view_ = false;
+		this.questView_ = false;
+		this.display_ = true;
+	},
 	  
-	beginNewGame_: function(){
+	loadGame_: function(){
+
+		if(!this.saved_game_exists){
+			alert("ERROR: Could not load game because no saved game was found.");
+			return;
+		}
+		
+		this.current_wiki_page = this.saved_current_wiki_page;
+		this.origin = this.saved_origin;
+		this.destination = this.saved_destination;
+		this.num_pages_visited = this.saved_num_pages_visited;
+		this.loaded_total_time = this.saved_additional_time;
+		this.main_start_time = Math.floor(Date.now() / 1000);
+		
+		this.loadQuestView_();
+	},
+	
+	newGame_: function(){
 		//Do all of the javascript-side setup for a new game:
 		// Select two random pages
 		// Make sure that all of the proper variables are initialized to zero.
-		loadQuestView_();
+		
+		try{
+		
+		//Make API Calls here.
+		var newOrigin = "Random 1";
+		var newDestination = "Random 2";
+		
+		}catch(err){
+			//An error occurred; Abort! Abort!
+			alert("ERROR: Sorry, but I failed to start a new game. Please try again.");
+			return;
+		}
+		
+		this.origin = newOrigin;
+		this.destination = newDestination;
+		
+		this.current_wiki_page = this.origin;
+		this.main_start_time = Math.floor(Date.now() / 1000);
+		this.loaded_total_time = 0;
+		this.num_pages_visited = 1;
+		
+		this.loadQuestView_();
+	},
+	
+	saveGame_: function(){
+	
+		// Full disclosure, this time stuff largely taken from a stack overflow thread.
+		// I made a few tweaks, but it's mostly the same.
+		var now = Math.floor(Date.now() / 1000);
+		var diff = now + this.loaded_total_time - this.main_start_time; 
+		
+		if( this.$$("#timer") ){
+			var display_total_time = this.$$("#timer").getAttribute("total_time");
+		}
+		else{
+			var h = Math.floor(diff / 3600);
+			var m = Math.floor((diff % 3600) / 60);
+			var s = Math.floor(diff % 60);
+			if (h < 10) {h = "0" + h};  // add zero in front of numbers < 10
+			if (m < 10) {m = "0" + m};
+			if (s < 10) {s = "0" + s};
+			var display_total_time = h + ":" + m + ":" + s;
+		}
+		
+		var packagedState = JSON.stringify({
+			"current_wiki_page" : this.current_wiki_page,
+			"origin" : this.origin,
+			"destination" : this.destination,
+			"num_pages_visited" : this.num_pages_visited,
+			"total_time" : diff,
+			"display_total_time" : display_total_time
+		});
+		
+		localStorage.setItem('wikipedia-quest_saved_game', packagedState);
+		
+		this.saved_current_wiki_page = this.current_wiki_page;
+		this.saved_origin = this.origin;
+		this.saved_destination = this.destination;
+		this.saved_num_pages_visited = this.num_pages_visited;
+		this.saved_additional_time = diff;
+		this.display_saved_additional_time = display_total_time;
+		
+		this.saved_game_exists = true;
 	},
 
 	loadQuestView_: function(){
@@ -513,19 +633,7 @@
 	},
 	
 	
-	// loadMainMenu_()
-	//
-	// Responsible for:
-	//	Changing boolean values to display the menu view. - COMPLETE
 	
-	loadMainMenu_: function(){
-		this.display_ = false;
-		this.main_menu_view_ = true;
-		this.explore_view_ = false;
-		this.questView_ = false;
-			
-		this.display_ = true;
-	},
 
 	attributeChanged: function (name, type) {
 		if (/^current_wiki_page$/i.test(name)) {
