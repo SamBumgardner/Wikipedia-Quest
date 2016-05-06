@@ -76,6 +76,11 @@
 				margin-top: 100px;
 			}
 			
+			.errorMessage{
+				background-color: pink;
+				padding:5px;
+			}
+			
 			.loader {
 			
 			  margin-left:48%;
@@ -160,7 +165,7 @@
 			
 			div.explore div{
 				box-sizing: border-box;
-				float: left;
+				
 				padding: 5px;
 			}
 
@@ -206,6 +211,9 @@
 				max-width: 200px;
 				margin:auto;
 				display: block;
+			}
+			div.quest .pageImage{
+				max-height: 188px;
 			}
 			#newGameButton {
 				margin-top:100px;
@@ -359,7 +367,13 @@
 								<img class="pageImage" src="[[page_image_url]]"/>
 							</div>
 							<div class="loader" hidden=[[!loading_overview_]]>Loading...</div>
-							<div class="error" hidden=[[!error_overview_]]></div>
+							<div class="errorMessage" hidden=[[!error_overview_]]>
+								<p>Unfortunately, it seems that an error has occurred.</br>
+								Please save and load the game from the Main Menu to attempt to fix it.</br>
+								If this problem persists, this game may be lost. If that is the case,
+								all you can do is start a new game.
+								</p>
+							</div>
 						</div>
 					</div>
 
@@ -381,7 +395,13 @@
 								</ul>
 							</div>
 							<div class="loader" hidden=[[!loading_links_]]>Loading...</div>
-							<div class="error" hidden=[[!error_links_]]></div>
+							<div class="errorMessage" hidden=[[!error_overview_]]>
+								<p>Unfortunately, it seems that an error has occurred.</br>
+								Please save and load the game from the Main Menu to attempt to fix it.</br>
+								If this problem persists, this game may be lost. If that is the case,
+								all you can do is start a new game.
+								</p>
+							</div>
 							
 						</div>
 					</div>
@@ -422,7 +442,13 @@
 							</div>
 							
 							<div class="loader" hidden=[[!loading_origin_]]>Loading...</div>
-							<div hidden=[[!error_origin_]]></div>
+							<div class="errorMessage" hidden=[[!error_origin_]]>
+								<p>Unfortunately, it seems that an error has occurred.</br>
+								Please save and load the game from the Main Menu to attempt to fix it.</br>
+								If this problem persists, this game may be lost. If that is the case,
+								all you can do is start a new game.
+								</p>
+							</div>
 							
 						</div>
 					</div>
@@ -436,7 +462,13 @@
 							</div>
 							
 							<div class="loader" hidden=[[!loading_destination_]]>Loading...</div>
-							<div hidden=[[!error_destination_]]></div>
+							<div class="errorMessage" hidden=[[!error_destination_]]>
+								<p>Unfortunately, it seems that an error has occurred.</br>
+								Please save and load the game from the Main Menu to attempt to fix it.</br>
+								If this problem persists, this game may be lost. If that is the case,
+								all you can do is start a new game.
+								</p>
+							</div>
 						
 						</div>
 					</div>
@@ -729,6 +761,12 @@
 		this.loaded_total_time = this.saved_additional_time;
 		this.main_start_time = Math.floor(Date.now() / 1000);
 		
+		//Loading will force a reload of everything,
+		// allowing a reset in case an error occurs.
+		this.wiki_page_changed = true;
+		this.origin_changed = true;
+		this.destination_changed = true;
+		
 		this.just_started = true;
 		
 	},
@@ -802,7 +840,10 @@
         (function (name) {
           window[name] = (function (data) {
             if (name !== callbackName || !data || !data.query || !data.query.random || data.query.random.length < 2) {
-              return;
+			  alert("The game failed to initialize.\n" +
+					"Please click 'Start New Game', load an existing game, or reload the page to retry.\n" +
+					"If the problem persists, please wait and try again later.");
+			  return;
             }
 			
             this.origin = data.query.random[0].title;
@@ -921,6 +962,10 @@
 				this.display_overview_ = true;
 
 				
+			}).bind(this)).catch((function (err) {
+				this.loading_overview_ = false;
+				this.error_overview_ = true;
+			
 			}).bind(this));
 
 	},
@@ -935,15 +980,13 @@
         (function (name) {
           window[name] = (function (data) {
             if (name !== callbackName || !data || !data.query || !data.query.pages) {
-			  console.log("An error occurred!");
 			  this.loading_links_ = false;
 			  this.error_links_ = true;
-			  
               return;
             }
 			var pageId = Object.keys(data.query.pages)[0]
-			if(data.query.pages[pageId].links){
-				
+			
+			if(data.query.pages[pageId].links){	
 				this.full_links_array = this.shuffle(data.query.pages[pageId].links);
 				for(var i = 0; i < 10; i++){
 					if( i < this.full_links_array.length ){
@@ -956,7 +999,7 @@
 			}
 			else{
 				this.loading_links_ = false;
-				this.loading_error_ = true;
+				this.error_links_ = true;
 				return;
 			}
 			
@@ -1011,8 +1054,8 @@
 			}
 		}
 		//Getting down here means it wasn't found.
-		alert("ERROR: It looks like that particular article isn't connected the the current one. " +
-			"Make sure that you enter the article name, and NOT the anme of the link that leads to it. " +
+		alert("ERROR: It looks like that particular article isn't connected to " + this.current_wiki_page + ".\n" +
+			"Make sure that you enter the article name, and NOT the anme of the link that leads to it.\n" +
 			"Also keep in mind that article names may be case-sensitive.");
 	},
 	
@@ -1041,12 +1084,16 @@
 				
 				this.origin_changed = false;
 				
-			}).bind(this));
+			}).bind(this)).catch((function (err) {
+				this.loading_origin_ = false;
+				this.error_origin_ = true;
+			
+			}).bind(this));;
 			
 		}
 		if(this.destination_changed){
 			this.display_destination_ = false;
-			this.error_destination_ = true;
+			this.error_destination_ = false;
 			this.loading_destination_ = true;
 			
 			getRemote("https://en.wikipedia.org/api/rest_v1/page/summary/" + this.destination)
@@ -1064,7 +1111,11 @@
 				
 				this.destination_changed = false;
 				
-			}).bind(this));
+			}).bind(this)).catch((function (err) {
+				this.loading_destination_ = false;
+				this.error_destination_ = true;
+			
+			}).bind(this));;
 			
 		}
 		
