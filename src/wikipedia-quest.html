@@ -534,11 +534,6 @@
 		this.explore_view_ = false;
 		this.questView_ = false;
 		
-		//Check if the browser has save data stored in it.
-		//If so, set the proper values, which are used by menu's html.
-		
-		//If not, set any necessary values, which are also used by menu's html.
-		
 		
 		this.$$("#loadButton").addEventListener("click", this.loadGame_.bind(this), false);
 		this.$$("#newGameButton").addEventListener("click", this.newGame_.bind(this), false);
@@ -758,35 +753,9 @@
 				
 				this.sumary_loading_ = false;
 			}).bind(this));
-		
-		
-		
-	
-	
-	//Make a call to the mediaWiki API here.
-		/*
-		 {}.bind(this))
-				.catch((function (err) {
-			if(err.message === "server500Error"){
-			this.error_msg = "A server error occurred. Sorry!";
-			this.error_ = true;
-		}
-		if(err.message === "server404Error"){
-			this.error_msg = "We have no data for that date.";
-			this.error_ = true;
-		}
-					if(err.message === "invalidDate"){
-			this.error_msg = "The submitted date was invalid.";
-			this.error_ = true;
-		}
-		this.loading_ = false;
-		this.display_ = false;
-		
-				}).bind(this));
-		*/
-		
-	
+
 	},
+	
 	linksApiCall_: function(){
 		//Make API calls here.
 		this.links_loading_ = true;
