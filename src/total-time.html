@@ -1,0 +1,72 @@
+<link rel="import" href="node_modules/@polymer/polymer/polymer.html" />
+
+<dom-module id="total-time">
+	<template>
+		<style>
+			p{
+				text-align: center;
+				font-size:24pt;
+			}
+		</style>
+
+
+		<p>[[total_time]]</p>
+		
+			
+	</template>
+	<script>
+    // element registration
+    Polymer({
+      is: "total-time",
+
+      
+		properties: {
+		
+			start_time:{
+				type: Number,
+				value: function(){return Math.floor(Date.now() / 1000);}
+			},
+			loaded_time:{
+				type: Number,
+				value:0
+			},
+			total_time:{
+				type: String,
+				value: "00:00:00",
+				reflectToAttribute: true
+			}
+		},
+
+    attached: function () {
+		(function(){this.recalcTime()}.bind(this))();
+    },
+	
+	recalcTime: function(){
+		// Full disclosure, this is largely taken from a stack overflow thread.
+		// I made a few tweaks, but it's mostly the same.
+		//Based off of system times, so isn't subject to execution delays.
+		var now = Math.floor(Date.now() / 1000);
+		var diff = now + this.loaded_time - this.start_time;
+		var h = Math.floor(diff / 3600);
+		var m = Math.floor((diff % 3600) / 60);
+		var s = Math.floor(diff % 60);
+		h = this.addLeadingZero(h);
+		m = this.addLeadingZero(m);
+		s = this.addLeadingZero(s);
+		this.total_time = h + ":" + m + ":" + s;
+		//Checks for changes twice a second to try and keep the changes regular
+		// even if there is an execution delay.
+		var t = setTimeout(this.recalcTime.bind(this), 500); 
+	},
+	
+	addLeadingZero: function(i) {
+		if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+		return i;
+	}
+	
+	
+	
+	
+	});
+  </script>
+</dom-module>

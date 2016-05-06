@@ -1,0 +1,86 @@
+<link rel="import" href="node_modules/@polymer/polymer/polymer.html" />
+
+<dom-module id="video-player">
+	<template>
+		<style>
+			img.arrows{
+				max-width: 50px;
+				width: 6%;
+				margin-top: 215px;
+				margin-bottom: 215px;
+				display:block;
+				float:left;
+				cursor: pointer;
+			}
+			iframe{
+				display:block;
+				float:left;
+				width: 65%;
+			}
+
+			#leftArrow{
+				margin-right: 1%;
+				margin-left: 10%;
+			}
+			#rightArrow{
+				margin-left: 1%;
+				margin-right: 10%;
+			}
+		</style>
+
+		<img id="leftArrow" class="arrows" src="images\\LeftArrow.png"/>
+		<iframe width="640" height="480" src="[[current_video]]" frameborder="0" allowfullscreen></iframe>
+		<img id="rightArrow" class="arrows" src="images\\RightArrow.png"/>
+			
+	</template>
+	<script>
+    // element registration
+    Polymer({
+      is: "video-player",
+
+      
+		properties: {
+		
+			video_playlist:{
+				type: Array,
+				value: function(){return ["https://www.youtube.com/embed/WgXqGBcGdX8",
+										  "https://www.youtube.com/embed/zlkIUmn5USg",
+										  "https://www.youtube.com/embed/x-NBfQOAdRI",
+										  "https://www.youtube.com/embed/bl9dP0CJfbQ",
+							              "https://www.youtube.com/embed/vdNpaJwLiZA",
+										  "https://www.youtube.com/embed/WFkGjEut9U4"];	}
+			},
+			current_video:{
+				type: String,
+				value: ""
+			},
+			current_video_index:{
+				type: Number,
+				value: 0
+			}
+    },
+
+    attached: function () {
+		if(this.video_playlist.length > 0){
+			this.current_video = this.video_playlist[0];
+			this.$.leftArrow.addEventListener("click", this.previousVideo.bind(this), false);
+			this.$.rightArrow.addEventListener("click", this.nextVideo.bind(this), false);
+		}
+    },
+	
+	previousVideo: function(){
+		if(this.current_video_index == 0){
+			this.current_video_index = this.video_playlist.length;
+		}
+		this.current_video_index--;
+		this.current_video = this.video_playlist[this.current_video_index];
+	},
+	
+	nextVideo: function(){
+		this.current_video_index = (this.current_video_index + 1) % this.video_playlist.length;
+		this.current_video = this.video_playlist[this.current_video_index];
+	},
+	
+	});
+  </script>
+</dom-module>

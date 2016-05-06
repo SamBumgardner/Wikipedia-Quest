@@ -1,4 +1,6 @@
 <link rel="import" href="node_modules/@polymer/polymer/polymer.html" />
+<link rel="import" href="video-player.html" />
+<link rel="import" href="total-time.html" />
 
 <dom-module id="wikipedia-quest">
 	<template>
@@ -74,33 +76,118 @@
 			div.explore div{
 				box-sizing: border-box;
 				float: left;
-				max-height:600px;
 				padding: 5px;
-				background-color:#f0f0f0
 				overflow:hidden;
 			}
 			
-			#overview {
-				width: 75%;
-				height:500px;
-			}
-			#links{
-				width: 25%;
-				height:500px;
-			}
-			#explore{
-				width: 75%;
-			}
-			#search{
-				width: 25%;
-			}
-			
-			#pageImage{
-				max-width: 200px;
+			div.wrapper{
+				background-color: #333;
+				box-sizing: border-box;
 				float: left;
-				padding: 15px;
+				padding: 5px;
+				overflow:hidden;
+				width:100%;
+			}
+			div.content{
+				box-sizing: border-box;
+				float: left;
+				padding: 5px;
+				background-color:#F1f1d4;
+				overflow:hidden;
+				width: 100%;
+			}
+			div.halfSize{
+				width:50%;
+			}
+			div.halfSize div{
+				min-height:300px;
+			}
+			h2{
+				text-align:center;
+			}
+			div.menu div button{
+				display:block;
+				margin:auto;
+			}
+			p.questText{
+				text-align: center;
+				font-size:24pt;
+			}
+			.pageImage{
+				max-width: 200px;
+				margin:auto;
+				display: block;
+			}
+			#newGameButton {
+				margin-top:100px;
+			}
+			#overviewWrapper {
+				width: 75%;
+				min-height:500px;
+			}
+			#overviewContent{
+				min-height:490px;
+			}
+			#linksWrapper{
+				width: 25%;
+				min-height:500px;
+			}
+			#linksContent{
+				min-height:490px;
+			}
+			#linksContent li{
+				margin-top:20px;
+			}
+			#exploreWrapper{
+				width: 75%;
+				min-height: 150px;
+			}
+			#exploreContent{
+				min-height: 150px;
+			}
+			#exploreLink{
+				display: block;
+				text-align: center;
+				padding-top: 15px;
+				padding-bottom: 15px;
+				margin-top: 45px;
+				
+				width: 200px;
+				margin-left: auto;
+				margin-right: auto;
+				background-color: white;
+				border-style: solid;
+				border-radius: 20px;
+				
+				text-decoration: None;
+				color: black;
+				
+				background: #caeefa;
+
+				transition: 0.3s;
+				
+			}
+			#exploreLink:hover{
+				background: #93e0fa;
+			}
+			#searchWrapper{
+				width: 25%;
+				min-height: 150px;
+			}
+			#searchContent{
+				min-height:150px;
+			}
+			#searchButton{
+				box-sizing: border-box;
+				width: 20%;
+				min-width:17px;
+			}
+			#searchText{
+				width: 75%;
+				box-sizing: border-box;
 			}
 		</style>
+		
   <header>
 	<div id="title">
 	<h1>Wikipedia Quest</h1>
@@ -110,69 +197,166 @@
 	<div id="navBar">
 		<ul class="topnav">
 			<li><a href="/menu">Main Menu</a></li>
-			<li><a href="/explore">Explore</a></li>
+			<li><a href="/explore/[[current_wiki_page]]">Explore</a></li>
 			<li><a href="/questLog">Quest Log</a></li>
 		</ul>
 	</div>
 	</header>
 	
-	<div id="mainContent">
-    
-		<template is="dom-if" if="[[mainMenuView_]]">
-			<div class="menu" hidden=[[!display_]]>
-					<p>
-					This is the main menu view!<br>
-					It's responsible for allowing the player to 
-					save and/or load their progress, as well as 
-					set preferences like font size.
+	<div id="webComponentBody">
+	
+		<div id="mainContent">
+		
+			<template is="dom-if" if="[[main_menu_view_]]">
+				<div class="menu" hidden=[[!display_]]>
+					<div class="wrapper">
+						<div id="menuInstructions" class="content">
+							
+							<h2>Welcome to Wikipedia Quest!</h2>
+							<p>
+							A wondrous adventure awaits you in the land of Wikipedia. 
+							Traverse from one article to the next along paths 
+							both familiar and obscure. A number of links will be presented
+							to you at each new step in your journey, but searching for a more direct
+							path is the only reliable way to finish your quest.<br><br>
+							Will you complete your quest and be forever remembered as a hero?<br>
+							Will you wander aimlessly, learning one factoid after another?<br><br>
+							Either way, remember that the journey matters far more than the destination!
+							</p>
+						</div>
+					</div>
 					
-					</p>
-			</div>
+					<div class="wrapper halfSize">
+						<div id="loadGameDiv" class="content">
+						<h2>Load Game</h2>
+						<p><strong>Current Page:</strong> [[saved_current_wiki_page]]</p>
+						<p><strong>Destination:</strong> [[saved_destination]]</p>
+						<p><strong>Number of pages visited:</strong> [[saved_num_pages_visited]]</p>
+						<p><strong>Total time elapsed:</strong> [[display_saved_additional_time]]</p>
+						<button id="loadButton">Load Game</button>
+						</div>
+					</div>
+						
+					<div class="wrapper halfSize">
+						<div id="NewGameDiv" class="content">
+						<h2>New Game</h2>
+						<button id="newGameButton">Start New Game</button>
+						</div>
+					</div>
+					
+					<div class="wrapper">
+						<div class="content">
+							<h2>Save Game</h2>
+							<p>
+							<strong>WARNING:</strong>
+							This will overwrite any old save data, so
+							don't do this if you still want to load the current
+							saved game.
+							</p>
+							<button id="saveButton">Save Game</button>
+						</div>
+					</div>
+				</div>
+			</template>
+			
+			<template is="dom-if" if="[[explore_view_]]">
+				<div class="explore" hidden=[[!display_]]>
+			
+					<div id="overviewWrapper" class="wrapper">
+						<div id="overviewContent" class="content">
+							<h2>[[current_wiki_page]]</h2>
+							<p id="page_summary">[[page_summary]]</p>
+							<img class="pageImage" src="[[page_image_url]]"/>
+						</div>
+					</div>
+
+					<div id="linksWrapper" class="wrapper">
+						<div id="linksContent" class="content">
+							<p>Obvious paths lead to...</p>
+							<ul>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 0)]]">[[arrayItem(small_links_array.*, 0)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 1)]]">[[arrayItem(small_links_array.*, 1)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 2)]]">[[arrayItem(small_links_array.*, 2)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 3)]]">[[arrayItem(small_links_array.*, 3)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 4)]]">[[arrayItem(small_links_array.*, 4)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 5)]]">[[arrayItem(small_links_array.*, 5)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 6)]]">[[arrayItem(small_links_array.*, 6)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 7)]]">[[arrayItem(small_links_array.*, 7)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 8)]]">[[arrayItem(small_links_array.*, 8)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 9)]]">[[arrayItem(small_links_array.*, 9)]]</a></li>
+							</ul>
+						</div>
+					</div>
+
+					<div id="exploreWrapper" class="wrapper">
+						<div id="exploreContent" class="content">
+							<a id="exploreLink" href="http://en.wikipedia.org/wiki/[[current_wiki_page]]" target="_blank">
+							Explore Further!</a>
+						</div>
+					</div>
+
+					<div id="searchWrapper" class="wrapper">
+						<div id="searchContent" class="content">
+							<p>Type in the name of an article that <strong>[[current_wiki_page]]</strong>
+							links to and discover a different path.</p>
+							<input id="searchText" type="text"></input>
+							<button id="searchButton">Go!</button>
+						</div>
+					</div>
+			
+				</div>
+			</template>
+			
+			<template is="dom-if" if="[[questView_]]">
+				<div class="quest" hidden=[[!display_]]>
+					<div class="wrapper">
+						<div class="content">
+							<h2>Quest Log</h2>
+						</div>
+					</div>
+					<div class="wrapper halfSize">
+						<div class="content">
+							<h2>Origin</h2>
+							<p class="questText">[[origin]]</p>
+							<img class="pageImage" src="[[origin_img]]"/>
+						</div>
+					</div>
+					<div class="wrapper halfSize">
+						<div class="content">
+							<h2>Destination</h2>
+							<p class="questText">[[destination]]</p>
+							<img class="pageImage" src="[[destination_img]]"/>
+						</div>
+					</div>
+					<div class="wrapper">
+						<div class="content">
+							<h2>Number of Pages Visited</h2>
+							<p class="questText">[[num_pages_visited]]</p>
+						</div>
+					</div>
+					<div class="wrapper">
+						<div class="content">
+							<h2>Total Time Elapsed</h2>
+							<total-time id="timer" start_time="[[main_start_time]]" loaded_time="[[loaded_total_time]]" ></total-time>
+						</div>
+					</div>
+					<div class="wrapper">
+						<div class="content">
+							<h2>Questing Music</h2>
+							<video-player 
+							video_playlist='["https://www.youtube.com/embed/WgXqGBcGdX8",
+										  "https://www.youtube.com/embed/zlkIUmn5USg",
+										  "https://www.youtube.com/embed/x-NBfQOAdRI",
+										  "https://www.youtube.com/embed/bl9dP0CJfbQ",
+							              "https://www.youtube.com/embed/vdNpaJwLiZA",
+										  "https://www.youtube.com/embed/WFkGjEut9U4"]''>
+							</video-player>
+						</div>
+					</div>
+				</div>
 		</template>
 		
-		<template is="dom-if" if="[[exploreView_]]">
-			<div class="explore" hidden=[[!display_]]>
-		
-				<div id="overview">
-				<img id="pageImage" src="[[pageImageURL]]"/>
-				<p id="pageSummary">[[pageSummary]]</p>
-				
-				</div>
-
-				<div id="links">
-				<p>Links Go Here!</p>
-				<ul>
-					<li><a href="/explore/Kevin%20Bacon">Bacon (Kevin)</a></li>
-					<li><a href="/explore/Lorem%20Ipsum%201">Lorem Ipsum 1</a></li>
-					<li><a href="/explore/Lorem%20Ipsum%202">Lorem Ipsum 2</a></li>
-					<li><a href="/explore/Lorem%20Ipsum%203">Lorem Ipsum 3</a></li>
-					<li><a href="/explore/Lorem%20Ipsum%204">Lorem Ipsum 4</a></li>
-				</ul>
-				</div>
-
-				<div id="explore">
-				<p><a href="http://en.wikipedia.org/wiki/Bacon" target="_blank">Explore!</a></p>
-				
-				</div>
-
-				<div id="search">
-				<p>Search!</p>
-				<input type="text"></input>
-				</div>
-		
-			</div>
-		</template>
-		
-		<template is="dom-if" if="[[questView_]]">
-			<div class="quest" hidden=[[!display_]]>
-				<p>
-				This is the quest view!<br>
-				It's responsible for showing the user their overall goal, as well as
-				various statistics such as time spent playing and total number of pages
-				visited.
-				</p>
-			</div>
-    </template>
+		</div>
 	
 	</div>
    
@@ -185,202 +369,460 @@
       
 		properties: {
 		
-			currentWikiPage: String,
-			pageSummary: String,
-			pageImageURL: String,
-			errorMsg: String,
-			playerInitialized_: {
+			current_wiki_page: {
+				type: String,
+				value: ""
+			},
+			origin:{
+				type: String,
+				value: "???"
+			},
+			origin_img:{
+				type: String,
+				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+			},
+			destination: {
+				type: String,
+				value: "???"
+			},
+			destination_img:{
+				type: String,
+				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+			},
+			num_pages_visited: {
+				type: Number,
+				value: 1
+			},
+			
+			
+			main_start_time: {
+				type: Number,
+				value: function(){return Math.floor(Date.now() / 1000);}
+			},
+			loaded_total_time: {
+				type: Number,
+				value: 0
+			},
+			
+			
+			saved_game_exists: {
 				type: Boolean,
 				value: false
 			},
-			loading_: {
-				type: Boolean,
-				value: true
+			saved_current_wiki_page: {
+				type: String,
+				value: "???"
 			},
-			error_: {
+			saved_origin: {
+				type: String,
+				value: "???"
+			},
+			saved_destination: {
+				type: String,
+				value: "???"
+			},
+			saved_num_pages_visited:{
+				type: Number,
+				value: 0
+			},
+			saved_additional_time:{
+				type: Number,
+				value: 0
+			},
+			display_saved_additional_time:{
+				type:String,
+				value:"0:0:0"
+			},
+			
+			
+			page_summary: {
+				type: String,
+				value: ""
+			},
+			page_image_url: {
+				type: String,
+				value: ""
+			},
+			small_links_array: {
+				type: Array,
+				value: function(){return ["1", "2", "3","1", "2", "3","1", "2", "3","4"];}
+			},
+			full_links_array: {
+				type: Array,
+				value: function(){return [];}
+			},
+			
+			
+			wiki_page_changed:{
 				type: Boolean,
 				value: false
 			},
+			origin_changed:{
+				type: Boolean,
+				value: false
+			},
+			destination_changed:{
+				type: Boolean,
+				value: false
+			},
+
+
+			error_msg: {
+				type: String,
+				value: "An error occurred."
+			},
+			
+			summary_loading_: {
+				type: Boolean,
+				value: false
+			},
+			links_loading_: {
+				type: Boolean,
+				value: false
+			},
+			
+			summary_error_: {
+				type: Boolean,
+				value: false
+			},
+			links_error_: {
+				type: Boolean,
+				value: false
+			},
+			
 			display_: {
 				type: Boolean,
 				value: false
 			},
-			mainMenuView_:{
+			main_menu_view_:{
 				type: Boolean,
 				value: true
 			},
-			exploreView_: {
+			explore_view_: {
 				type: Boolean,
 				value: false
 			},
-			firstVisit_:{
+			questView_:{
 				type: Boolean,
 				value: false
 			}
     },
 
     attached: function () {
-      this.welcomeUser_();
+      this.initializeMenu();
+	  this.newGame_();
+	  
     },
 	  
-	  welcomeUser_: function(){
-			this.loading_ = true;
-			this.display_ = false;
-			this.mainMenuView_ = true;
-			this.exploreView_ = false;
-			this.questView_ = false;
+	initializeMenu: function(){
+		this.loading_ = true;
+		this.display_ = false;
+		this.main_menu_view_ = true;
+		this.explore_view_ = false;
+		this.questView_ = false;
+		
+		//Check if the browser has save data stored in it.
+		//If so, set the proper values, which are used by menu's html.
+		
+		//If not, set any necessary values, which are also used by menu's html.
+		
+		
+		this.$$("#loadButton").addEventListener("click", this.loadGame_.bind(this), false);
+		this.$$("#newGameButton").addEventListener("click", this.newGame_.bind(this), false);
+		this.$$("#saveButton").addEventListener("click", this.saveGame_.bind(this), false);
+		
+		
+		if(localStorage.getItem("wikipedia-quest_saved_game")){
 			
-			//Check if the browser has save data stored in it.
-			//If so, set the proper values, which are used by menu's html.
+			var packagedState = JSON.parse(localStorage.getItem("wikipedia-quest_saved_game"));
+			this.saved_current_wiki_page = packagedState.current_wiki_page;
+			this.saved_origin = packagedState.origin;
+			this.saved_destination = packagedState.destination;
+			this.saved_num_pages_visited = packagedState.num_pages_visited;
+			this.saved_additional_time = packagedState.total_time;
+			this.display_saved_additional_time = packagedState.display_total_time;
 			
-			//If not, set any necessary values, which are also used by menu's html.
-			
-			this.loading_ = false;
-			this.display_ = true;
-	  },
+			this.saved_game_exists = true;
+		}
+		
+		this.loading_ = false;
+		this.display_ = true;
+	},
+	
+	// loadMainMenu_()
+	//
+	// Responsible for:
+	//	Changing boolean values to display the menu view. - COMPLETE
+	
+	loadMainMenu_: function(){
+		this.display_ = false;
+		this.main_menu_view_ = true;
+		this.explore_view_ = false;
+		this.questView_ = false;
+		this.display_ = true;
+	},
 	  
-		beginNewGame_: function(){
-			//Do all of the javascript-side setup for a new game:
-			// Select two random pages
-			// Make sure that all of the proper variables are initialized to zero.
-			loadQuestView_();
-		},
+	loadGame_: function(){
 
-		loadQuestView_: function(){
-			this.loading_ = true;
-			this.display_ = false;
-			this.mainMenuView_ = false;
-			this.exploreView_ = false;
-			this.questView_ = true;
+		if(!this.saved_game_exists){
+			alert("ERROR: Could not load game because no saved game was found.");
+			return;
+		}
 		
+		this.current_wiki_page = this.saved_current_wiki_page;
+		this.origin = this.saved_origin;
+		this.destination = this.saved_destination;
+		this.num_pages_visited = this.saved_num_pages_visited;
+		this.loaded_total_time = this.saved_additional_time;
+		this.main_start_time = Math.floor(Date.now() / 1000);
 		
-			
-			this.loading_ = false;
-			this.display_ = true;
-		},
+	},
+	
+	newGame_: function(){
+		//Do all of the javascript-side setup for a new game:
+		// Select two random pages
+		// Make sure that all of the proper variables are initialized to zero.
 		
-		loadMainMenu_: function(){
-			this.loading_ = true;
-			this.display_ = false;
-			this.mainMenuView_ = true;
-			this.exploreView_ = false;
-			this.questView_ = false;
-			
-
-			
-			this.loading_ = false;
-			this.display_ = true;
-		},
-
-		attributeChanged: function (name, type) {
-			if (/^currentWikiPage$/i.test(name)) {
-				this.loadWikiPage_();
-			}
-		},
-	  
-		loadWikiPage_: function () {
-			this.loading_ = true;
-			this.display_ = false;
-			this.error_ = false;
-			this.mainMenuView_ = false;
-			this.exploreView_ = true;
-			this.questView_ = false;
-	  
-
+		try{
 		
-			this.pageSummary = 	"Bacon is a meat product prepared from a pig and usually cured." +
-								"It is first cured using large quantities of salt, either in a " +
-								"brine or in a dry packing; the result is fresh bacon (also known" +
-								"as green bacon). Fresh bacon may then be further dried for weeks " +
-								"or months in cold air, or it may be boiled or smoked. Fresh and " +
-								"dried bacon is typically cooked before eating, often by frying. " +
-								"Boiled bacon is ready to eat, as is some smoked bacon, but may be " +
-								"cooked further before eating.";
-								
-			this.pageImageURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
-	    
-			//Make a call to the mediaWiki API here.
-			/*
-			 {}.bind(this))
-					.catch((function (err) {
-				if(err.message === "server500Error"){
-				this.errorMsg = "A server error occurred. Sorry!";
-				this.error_ = true;
-			}
-			if(err.message === "server404Error"){
-				this.errorMsg = "We have no data for that date.";
-				this.error_ = true;
-			}
-						if(err.message === "invalidDate"){
-				this.errorMsg = "The submitted date was invalid.";
-				this.error_ = true;
-			}
-			this.loading_ = false;
-			this.display_ = false;
-			
-					}).bind(this));
-			*/
+		//Make API Calls here.
+		var newOrigin = "Random 1";
+		var newDestination = "Random 2";
 		
-			this.loading_ = false;
-			this.display_ = true;
-		},
-	  
-	  removeAllLinks: function() {
-		//Same idea, but remove links instead.
-		/*var Ul = this.$.listOfEvents;
+		}catch(err){
+			//An error occurred; Abort! Abort!
+			alert("ERROR: Sorry, but I failed to start a new game. Please try again.");
+			return;
+		}
 		
-		while(Ul.firstChild != null){
-			Ul.firstChild.remove();
-		}*/
-	  },
-	  
-	  insertAllEvents: function() {
-		//Add links with the wiki names
-		//The links will go to the page routing, though.
+		this.origin = newOrigin;
+		this.destination = newDestination;
 		
-		/*
-		var Ul = this.$.listOfEvents;
-
-		if(this.eventList){
-			for( var i = 0; i < this.eventList.length ; i++){
-
-			  
-			  var newListElement = document.createElement("li");
-			  var newParagraph = document.createElement("p"); 
-			  var newLink = document.createElement("a");
-			  
-			  newParagraph.innerHTML = this.formatStartTime(this.eventList[i]);
-			  newLink.href = this.getMoreInfoLink(this.eventList[i].link);
-			  newLink.innerHTML = this.eventList[i].title.$t;
-			  
-			  newParagraph.appendChild(newLink);
-			  newListElement.appendChild(newParagraph);
-			  
-			  
-			  Ul.appendChild(newListElement);
-			}
+		this.current_wiki_page = this.origin;
+		this.main_start_time = Math.floor(Date.now() / 1000);
+		this.loaded_total_time = 0;
+		this.num_pages_visited = 1;
+		
+	},
+	
+	saveGame_: function(){
+	
+		// Full disclosure, this time stuff largely taken from a stack overflow thread.
+		// I made a few tweaks, but it's mostly the same.
+		var now = Math.floor(Date.now() / 1000);
+		var diff = now + this.loaded_total_time - this.main_start_time; 
+		
+		if( this.$$("#timer") ){
+			var display_total_time = this.$$("#timer").getAttribute("total_time");
 		}
 		else{
-			throw new Error("invalidDate");
+			var h = Math.floor(diff / 3600);
+			var m = Math.floor((diff % 3600) / 60);
+			var s = Math.floor(diff % 60);
+			if (h < 10) {h = "0" + h};  // add zero in front of numbers < 10
+			if (m < 10) {m = "0" + m};
+			if (s < 10) {s = "0" + s};
+			var display_total_time = h + ":" + m + ":" + s;
 		}
+		
+		var packagedState = JSON.stringify({
+			"current_wiki_page" : this.current_wiki_page,
+			"origin" : this.origin,
+			"destination" : this.destination,
+			"num_pages_visited" : this.num_pages_visited,
+			"total_time" : diff,
+			"display_total_time" : display_total_time
+		});
+		
+		localStorage.setItem('wikipedia-quest_saved_game', packagedState);
+		
+		this.saved_current_wiki_page = this.current_wiki_page;
+		this.saved_origin = this.origin;
+		this.saved_destination = this.destination;
+		this.saved_num_pages_visited = this.num_pages_visited;
+		this.saved_additional_time = diff;
+		this.display_saved_additional_time = display_total_time;
+		
+		this.saved_game_exists = true;
+	},
+
+	
+	
+	
+	
+
+	attributeChanged: function (name, type) {
+		if (/^current_wiki_page$/i.test(name)) {
+			if(!this.explore_view_){
+				this.wiki_page_changed = true;
+			}
+			else{
+				this.switchWikiPage_(this.current_wiki_page);
+			}
+			if(this.current_wiki_page === this.destination){
+				alert("You won, congratulations!");
+			}
+		}
+		if (/^origin$/i.test(name)) {
+			this.origin_changed = true;
+		}
+		if (/^destination$/i.test(name)) {
+			this.destination_changed = true;
+		}
+	},
+	
+	arrayItem: function(change, index) {
+        return this.get(index, change.base);
+    },
+	
+	initializeExplore: function(){
+		
+	},
+	
+	loadWikiPage_: function () {
+		this.error_ = false;
+		this.main_menu_view_ = false;
+		this.explore_view_ = true;
+		this.questView_ = false;
+		
+		if(this.wiki_page_changed){
+			this.display_ = false;
+			this.switchWikiPage_(this.current_wiki_page);
+			
+
+			this.display_ = true;
+			this.wiki_page_changed = false;
+		}	
+		
+		
+	},
+	
+	switchWikiPage_: function(newPage){
+		this.current_wiki_page = newPage;
+		this.num_pages_visited++;
+		this.overviewApiCall_();
+		this.linksApiCall_();
+	},
+	overviewApiCall_: function(){
+		//Make API calls here.
+		this.summary_loading_ = true;
+			
+		this.page_summary = 	"Bacon is a meat product prepared from a pig and usually cured. " +
+							"It is first cured using large quantities of salt, either in a " +
+							"brine or in a dry packing; the result is fresh bacon (also known " +
+							"as green bacon). Fresh bacon may then be further dried for weeks " +
+							"or months in cold air, or it may be boiled or smoked. Fresh and " +
+							"dried bacon is typically cooked before eating, often by frying. " +
+							"Boiled bacon is ready to eat, as is some smoked bacon, but may be " +
+							"cooked further before eating.";
+		this.page_image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+	
+	
+	//Make a call to the mediaWiki API here.
+		/*
+		 {}.bind(this))
+				.catch((function (err) {
+			if(err.message === "server500Error"){
+			this.error_msg = "A server error occurred. Sorry!";
+			this.error_ = true;
+		}
+		if(err.message === "server404Error"){
+			this.error_msg = "We have no data for that date.";
+			this.error_ = true;
+		}
+					if(err.message === "invalidDate"){
+			this.error_msg = "The submitted date was invalid.";
+			this.error_ = true;
+		}
+		this.loading_ = false;
+		this.display_ = false;
+		
+				}).bind(this));
 		*/
 		
-	  },
-      getMoreInfoLink: function (links) {
-		//Can use the same idea to generate the hrefs for the wiki links.
+		this.summary_loading_ = false;
+	
+	},
+	linksApiCall_: function(){
+		//Make API calls here.
+		this.links_loading_ = true;
 		
-		/*if (!links || links.length < 1) {
-          return '#';
-        }
+		//console.log("About to alter array");
+		
+		for(var i = 0; i < this.small_links_array.length; i++){
+			this.set("small_links_array." + i,  JSON.stringify(Math.random()));
+		}
+		
+		//console.log(this.small_links_array);
+		
+		this.links_loading_ = false;
+	},
+	  
+	removeAllLinks: function() {
+	//Same idea, but remove links instead.
+	/*var Ul = this.$.listOfEvents;
 
-        for (var i = 0; i < links.length; i++) {
-          if (links[i].rel === 'alternate' && links[i].type === 'text/html') {
-            return links[i].href;
-          }
-        }
+	while(Ul.firstChild != null){
+		Ul.firstChild.remove();
+	}*/
+	},
 
-        return '#'; */
-      }
-    });
+	insertAllEvents: function() {
+	//Add links with the wiki names
+	//The links will go to the page routing, though.
+
+	/*
+	var Ul = this.$.listOfEvents;
+
+	if(this.eventList){
+		for( var i = 0; i < this.eventList.length ; i++){
+
+		  
+		  var newListElement = document.createElement("li");
+		  var newParagraph = document.createElement("p"); 
+		  var newLink = document.createElement("a");
+		  
+		  newParagraph.innerHTML = this.formattotal-time(this.eventList[i]);
+		  newLink.href = this.getMoreInfoLink(this.eventList[i].link);
+		  newLink.innerHTML = this.eventList[i].title.$t;
+		  
+		  newParagraph.appendChild(newLink);
+		  newListElement.appendChild(newParagraph);
+		  
+		  
+		  Ul.appendChild(newListElement);
+		}
+	}
+	else{
+		throw new Error("invalidDate");
+	}
+	*/
+
+	},
+	getMoreInfoLink: function (links) {
+	//Can use the same idea to generate the hrefs for the wiki links.
+
+	/*if (!links || links.length < 1) {
+	  return '#';
+	}
+
+	for (var i = 0; i < links.length; i++) {
+	  if (links[i].rel === 'alternate' && links[i].type === 'text/html') {
+		return links[i].href;
+	  }
+	}
+
+	return '#'; */
+	},
+	
+	loadQuestView_: function(){
+		this.display_ = false;
+		this.main_menu_view_ = false;
+		this.explore_view_ = false;
+		this.questView_ = true;
+
+		this.display_ = true;
+	},
+	});
   </script>
 </dom-module>

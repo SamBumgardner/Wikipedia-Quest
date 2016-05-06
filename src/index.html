@@ -13,23 +13,13 @@
 	<style>
 		body {
 			margin:0;
+			background-color: #333;
 		}
 	</style>
   
   <script>
     (function () {
-	  page('/', function(context, next){
-			context.handled = true;
-			
-			//For if the user navigated back to the index using the back button.
-			//returns to the main menu.
-			
-			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
-				document.getElementsByTagName('wikipedia-quest')[0].loadMainMenu_();
-			}
-			
-			next();
-	  });
+	  
 		
 		page('/menu', function (context, next) {
 			context.handled = true;
@@ -60,25 +50,40 @@
 			
 			next();
 		});
-	
-    page('/explore/:wikiPageName', function (context, next) {
+		page('/explore/:wikiPageName', function (context, next) {
 			context.handled = true;
-		
 			//Changes wiki page for the adventure view.
 			// In the adventure view, checks if this matches where
 			// the player should be.
-			
-			changeWikiPage(context.wikiPageName);
+			changeWikiPage(context.params.wikiPageName);
 			
       next();
     });
+		page('/', function(context, next){
+			context.handled = true;
+			
+			//For if the user navigated back to the index using the back button.
+			//returns to the main menu.
+			
+			if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
+				document.getElementsByTagName('wikipedia-quest')[0].loadMainMenu_();
+			}
+			
+			next();
+		});
+		page('*', function(context,next){
+			context.handled = true;
+		// Can try to catch debug issues here.
+		});
+	
+    
 
     
 		
 	function changeWikiPage(pageName) {
-		
 		if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
-			document.getElementsByTagName('wikipedia-quest')[0].setAttribute('currentWikiPage', pageName);
+			document.getElementsByTagName('wikipedia-quest')[0].setAttribute('current_wiki_page', pageName);
+			document.getElementsByTagName('wikipedia-quest')[0].loadWikiPage_();
 		}
     }
 
@@ -88,12 +93,10 @@
   </script>
 	
 	<link rel="import" href="wikipedia-quest.html" />
+	<link rel="import" href="video-player.html" />
+	<link rel="import" href="total-time.html" />
 </head>
 <body>
 	<wikipedia-quest></wikipedia-quest>
-
-
-
-
 </body>
 </html>
