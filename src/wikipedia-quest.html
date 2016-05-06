@@ -1,5 +1,6 @@
 <link rel="import" href="node_modules/@polymer/polymer/polymer.html" />
 <link rel="import" href="video-player.html" />
+<link rel="import" href="total-time.html" />
 
 <dom-module id="wikipedia-quest">
 	<template>
@@ -203,7 +204,7 @@
 	
 		<div id="mainContent">
 		
-			<template is="dom-if" if="[[mainMenuView_]]">
+			<template is="dom-if" if="[[main_menu_view_]]">
 				<div class="menu" hidden=[[!display_]]>
 					<div class="wrapper">
 						<div id="menuInstructions" class="content">
@@ -225,10 +226,10 @@
 					<div class="wrapper halfSize">
 						<div id="loadGameDiv" class="content">
 						<h2>Load Game</h2>
-						<p><strong>Current Page:</strong> [[savedCurrentWikiPage]]</p>
-						<p><strong>Destination:</strong> [[savedDestination]]</p>
-						<p><strong>Number of pages visited:</strong> [[savedNumPagesVisited]]</p>
-						<p><strong>Total time elapsed:</strong> [[savedAdditionalTime]]</p>
+						<p><strong>Current Page:</strong> [[saved_current_wiki_page]]</p>
+						<p><strong>Destination:</strong> [[saved_destination]]</p>
+						<p><strong>Number of pages visited:</strong> [[saved_num_pages_visited]]</p>
+						<p><strong>Total time elapsed:</strong> [[saved_additional_time]]</p>
 						<button id="loadButton">Load Game</button>
 						</div>
 					</div>
@@ -255,14 +256,14 @@
 				</div>
 			</template>
 			
-			<template is="dom-if" if="[[exploreView_]]">
+			<template is="dom-if" if="[[explore_view_]]">
 				<div class="explore" hidden=[[!display_]]>
 			
 					<div id="overviewWrapper" class="wrapper">
 						<div id="overviewContent" class="content">
-							<h2>[[currentWikiPage]]</h2>
-							<p id="pageSummary">[[pageSummary]]</p>
-							<img class="pageImage" src="[[pageImageURL]]"/>
+							<h2>[[current_wiki_page]]</h2>
+							<p id="page_summary">[[page_summary]]</p>
+							<img class="pageImage" src="[[page_image_url]]"/>
 						</div>
 					</div>
 
@@ -288,7 +289,7 @@
 
 					<div id="searchWrapper" class="wrapper">
 						<div id="searchContent" class="content">
-							<p>Type in the name of an article that <strong>[[currentWikiPage]]</strong>
+							<p>Type in the name of an article that <strong>[[current_wiki_page]]</strong>
 							links to and discover a different path.</p>
 							<input id="searchText" type="text"></input>
 							<button id="searchButton">Go!</button>
@@ -309,20 +310,20 @@
 						<div class="content">
 							<h2>Origin</h2>
 							<p class="questText">[[origin]]</p>
-							<img class="pageImage" src="[[originImg]]"/>
+							<img class="pageImage" src="[[origin_img]]"/>
 						</div>
 					</div>
 					<div class="wrapper halfSize">
 						<div class="content">
 							<h2>Destination</h2>
 							<p class="questText">[[destination]]</p>
-							<img class="pageImage" src="[[destinationImg]]"/>
+							<img class="pageImage" src="[[destination_img]]"/>
 						</div>
 					</div>
 					<div class="wrapper">
 						<div class="content">
 							<h2>Number of Pages Visited</h2>
-							<p class="questText">[[numPagesVisited]]</p>
+							<p class="questText">[[num_pages_visited]]</p>
 						</div>
 					</div>
 					<div class="wrapper">
@@ -360,7 +361,7 @@
       
 		properties: {
 		
-			currentWikiPage: {
+			current_wiki_page: {
 				type: String,
 				value: ""
 			},
@@ -368,7 +369,7 @@
 				type: String,
 				value: "???"
 			},
-			originImg:{
+			origin_img:{
 				type: String,
 				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
 			},
@@ -376,61 +377,64 @@
 				type: String,
 				value: "???"
 			},
-			destinationImg:{
+			destination_img:{
 				type: String,
 				value: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
 			},
-			numPagesVisited: {
+			num_pages_visited: {
 				type: Number,
 				value: 0
-			},
-			startTime: {
-				type: Number,
-				value: 0
-			},
-			additionalTime: {
-				type: Number,
-				value: 0
-			},
-			totalTime:{
-				type: String,
-				value: "00:00"
 			},
 			
 			
-			savedCurrentWikiPage: {
+			main_total_time: {
+				type: Number,
+				value: 0
+			},
+			main_start_time: {
+				type: Number,
+				value: function(){return Math.floor(Date.now() / 1000);}
+			},
+			loaded_total_time: {
+				type: Number,
+				value: 0
+			},
+			
+			
+			
+			saved_current_wiki_page: {
 				type: String,
 				value: "???"
 			},
-			savedDestination: {
+			saved_destination: {
 				type: String,
 				value: "???"
 			},
-			savedNumPagesVisited:{
+			saved_num_pages_visited:{
 				type: Number,
 				value: 0
 			},
-			savedAdditionalTime:{
+			saved_additional_time:{
 				type: Number,
 				value: 0
 			},
 			
 			
-			pageSummary: {
+			page_summary: {
 				type: String,
 				value: ""
 			},
-			pageImageURL: {
+			page_image_url: {
 				type: String,
 				value: ""
 			},
 
 
-			errorMsg: {
+			error_msg: {
 				type: String,
 				value: "An error occurred."
 			},
-			playerInitialized_: {
+			player_initialized_: {
 				type: Boolean,
 				value: false
 			},
@@ -446,18 +450,14 @@
 				type: Boolean,
 				value: false
 			},
-			mainMenuView_:{
+			main_menu_view_:{
 				type: Boolean,
 				value: true
 			},
-			exploreView_: {
+			explore_view_: {
 				type: Boolean,
 				value: false
 			},
-			firstVisit_:{
-				type: Boolean,
-				value: false
-			}
     },
 
     attached: function () {
@@ -467,8 +467,8 @@
 	welcomeUser_: function(){
 		this.loading_ = true;
 		this.display_ = false;
-		this.mainMenuView_ = true;
-		this.exploreView_ = false;
+		this.main_menu_view_ = true;
+		this.explore_view_ = false;
 		this.questView_ = false;
 		
 		//Check if the browser has save data stored in it.
@@ -476,7 +476,7 @@
 		
 		//If not, set any necessary values, which are also used by menu's html.
 		
-		this.currentWikiPage = "Bacon";
+		this.current_wiki_page = "Bacon";
 		
 		this.loading_ = false;
 		this.display_ = true;
@@ -490,15 +490,11 @@
 	},
 
 	loadQuestView_: function(){
-		this.loading_ = true;
 		this.display_ = false;
-		this.mainMenuView_ = false;
-		this.exploreView_ = false;
+		this.main_menu_view_ = false;
+		this.explore_view_ = false;
 		this.questView_ = true;
-	
-	
-		
-		this.loading_ = false;
+
 		this.display_ = true;
 	},
 	
@@ -509,18 +505,16 @@
 	//	Changing boolean values to display the menu view. - COMPLETE
 	
 	loadMainMenu_: function(){
-		this.loading_ = true;
 		this.display_ = false;
-		this.mainMenuView_ = true;
-		this.exploreView_ = false;
+		this.main_menu_view_ = true;
+		this.explore_view_ = false;
 		this.questView_ = false;
 			
-		this.loading_ = false;
 		this.display_ = true;
 	},
 
 	attributeChanged: function (name, type) {
-		if (/^currentWikiPage$/i.test(name)) {
+		if (/^current_wiki_page$/i.test(name)) {
 			this.loadWikiPage_();
 		}
 	},
@@ -529,11 +523,11 @@
 		this.loading_ = true;
 		this.display_ = false;
 		this.error_ = false;
-		this.mainMenuView_ = false;
-		this.exploreView_ = true;
+		this.main_menu_view_ = false;
+		this.explore_view_ = true;
 		this.questView_ = false;
 	
-		this.pageSummary = 	"Bacon is a meat product prepared from a pig and usually cured. " +
+		this.page_summary = 	"Bacon is a meat product prepared from a pig and usually cured. " +
 							"It is first cured using large quantities of salt, either in a " +
 							"brine or in a dry packing; the result is fresh bacon (also known " +
 							"as green bacon). Fresh bacon may then be further dried for weeks " +
@@ -542,22 +536,22 @@
 							"Boiled bacon is ready to eat, as is some smoked bacon, but may be " +
 							"cooked further before eating.";
 							
-		this.pageImageURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
+		this.page_image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
 	
 		//Make a call to the mediaWiki API here.
 		/*
 		 {}.bind(this))
 				.catch((function (err) {
 			if(err.message === "server500Error"){
-			this.errorMsg = "A server error occurred. Sorry!";
+			this.error_msg = "A server error occurred. Sorry!";
 			this.error_ = true;
 		}
 		if(err.message === "server404Error"){
-			this.errorMsg = "We have no data for that date.";
+			this.error_msg = "We have no data for that date.";
 			this.error_ = true;
 		}
 					if(err.message === "invalidDate"){
-			this.errorMsg = "The submitted date was invalid.";
+			this.error_msg = "The submitted date was invalid.";
 			this.error_ = true;
 		}
 		this.loading_ = false;
@@ -594,7 +588,7 @@
 		  var newParagraph = document.createElement("p"); 
 		  var newLink = document.createElement("a");
 		  
-		  newParagraph.innerHTML = this.formatStartTime(this.eventList[i]);
+		  newParagraph.innerHTML = this.formattotal-time(this.eventList[i]);
 		  newLink.href = this.getMoreInfoLink(this.eventList[i].link);
 		  newLink.innerHTML = this.eventList[i].title.$t;
 		  
