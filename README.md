@@ -23,3 +23,7 @@ node_modules\.bin\gulp
 ```
 npm start
 ```
+
+## Notes about the application
+
+* Not all wikipedia articles have an image that mediawiki's RESTful API can fetch, despite there being images within the page. In those cases, a "No Image available" image is displayed instead.
