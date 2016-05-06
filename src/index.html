@@ -83,6 +83,7 @@
 	function changeWikiPage(pageName) {
 		if(document.getElementsByTagName('wikipedia-quest')[0]){ //This doesn't run on the initial load.
 			document.getElementsByTagName('wikipedia-quest')[0].setAttribute('current_wiki_page', pageName);
+			document.getElementsByTagName('wikipedia-quest')[0].loadWikiPage_();
 		}
     }
 

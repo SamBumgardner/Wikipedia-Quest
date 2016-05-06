@@ -194,7 +194,7 @@
 	<div id="navBar">
 		<ul class="topnav">
 			<li><a href="/menu">Main Menu</a></li>
-			<li><a href="/explore">Explore</a></li>
+			<li><a href="/explore/[[current_wiki_page]]">Explore</a></li>
 			<li><a href="/questLog">Quest Log</a></li>
 		</ul>
 	</div>
@@ -271,11 +271,16 @@
 						<div id="linksContent" class="content">
 							<p>Obvious paths lead to...</p>
 							<ul>
-								<li><a href="/explore/Kevin%20Bacon">Bacon (Kevin)</a></li>
-								<li><a href="/explore/Lorem%20Ipsum%201">Lorem Ipsum 1</a></li>
-								<li><a href="/explore/Lorem%20Ipsum%202">Lorem Ipsum 2</a></li>
-								<li><a href="/explore/Lorem%20Ipsum%203">Lorem Ipsum 3</a></li>
-								<li><a href="/explore/Lorem%20Ipsum%204">Lorem Ipsum 4</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 0)]]">[[arrayItem(small_links_array.*, 0)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 1)]]">[[arrayItem(small_links_array.*, 1)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 2)]]">[[arrayItem(small_links_array.*, 2)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 3)]]">[[arrayItem(small_links_array.*, 3)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 4)]]">[[arrayItem(small_links_array.*, 4)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 5)]]">[[arrayItem(small_links_array.*, 5)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 6)]]">[[arrayItem(small_links_array.*, 6)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 7)]]">[[arrayItem(small_links_array.*, 7)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 8)]]">[[arrayItem(small_links_array.*, 8)]]</a></li>
+								<li><a href="/explore/[[arrayItem(small_links_array.*, 9)]]">[[arrayItem(small_links_array.*, 9)]]</a></li>
 							</ul>
 						</div>
 					</div>
@@ -435,6 +440,14 @@
 				type: String,
 				value: ""
 			},
+			small_links_array: {
+				type: Array,
+				value: function(){return ["1", "2", "3","1", "2", "3","1", "2", "3","4"];}
+			},
+			full_links_array: {
+				type: Array,
+				value: function(){return [];}
+			},
 			
 			
 			wiki_page_changed:{
@@ -455,18 +468,25 @@
 				type: String,
 				value: "An error occurred."
 			},
-			player_initialized_: {
+			
+			summary_loading_: {
 				type: Boolean,
 				value: false
 			},
-			loading_: {
-				type: Boolean,
-				value: true
-			},
-			error_: {
+			links_loading_: {
 				type: Boolean,
 				value: false
 			},
+			
+			summary_error_: {
+				type: Boolean,
+				value: false
+			},
+			links_error_: {
+				type: Boolean,
+				value: false
+			},
+			
 			display_: {
 				type: Boolean,
 				value: false
@@ -479,13 +499,19 @@
 				type: Boolean,
 				value: false
 			},
+			questView_:{
+				type: Boolean,
+				value: false
+			}
     },
 
     attached: function () {
-      this.initialize_menu();
+      this.initializeMenu();
+	  this.newGame_();
+	  
     },
 	  
-	initialize_menu: function(){
+	initializeMenu: function(){
 		this.loading_ = true;
 		this.display_ = false;
 		this.main_menu_view_ = true;
@@ -496,10 +522,6 @@
 		//If so, set the proper values, which are used by menu's html.
 		
 		//If not, set any necessary values, which are also used by menu's html.
-		
-		this.current_wiki_page = "Bacon";
-		this.origin = "Bacon";
-		this.destination = "Russia";
 		
 		
 		this.$$("#loadButton").addEventListener("click", this.loadGame_.bind(this), false);
@@ -551,7 +573,6 @@
 		this.loaded_total_time = this.saved_additional_time;
 		this.main_start_time = Math.floor(Date.now() / 1000);
 		
-		this.loadQuestView_();
 	},
 	
 	newGame_: function(){
@@ -579,7 +600,6 @@
 		this.loaded_total_time = 0;
 		this.num_pages_visited = 1;
 		
-		this.loadQuestView_();
 	},
 	
 	saveGame_: function(){
@@ -623,14 +643,7 @@
 		this.saved_game_exists = true;
 	},
 
-	loadQuestView_: function(){
-		this.display_ = false;
-		this.main_menu_view_ = false;
-		this.explore_view_ = false;
-		this.questView_ = true;
-
-		this.display_ = true;
-	},
+	
 	
 	
 	
@@ -639,6 +652,9 @@
 		if (/^current_wiki_page$/i.test(name)) {
 			if(!this.explore_view_){
 				this.wiki_page_changed = true;
+			}
+			else{
+				this.switchWikiPage_(this.current_wiki_page);
 			}
 			if(this.current_wiki_page === this.destination){
 				alert("You won, congratulations!");
@@ -651,15 +667,45 @@
 			this.destination_changed = true;
 		}
 	},
-  
+	
+	arrayItem: function(change, index) {
+		console.log(this.path);
+	
+        return this.get(index, change.base);
+    },
+	
+	initializeExplore: function(){
+		
+	},
+	
 	loadWikiPage_: function () {
-		this.loading_ = true;
-		this.display_ = false;
 		this.error_ = false;
 		this.main_menu_view_ = false;
 		this.explore_view_ = true;
 		this.questView_ = false;
+		
+		if(this.wiki_page_changed){
+			this.display_ = false;
+			this.switchWikiPage_(this.current_wiki_page);
+			
+
+			this.display_ = true;
+			this.wiki_page_changed = false;
+		}	
+		
+		
+	},
 	
+	switchWikiPage_: function(newPage){
+		this.current_wiki_page = newPage;
+		this.num_pages_visited++;
+		this.overviewApiCall_();
+		this.linksApiCall_();
+	},
+	overviewApiCall_: function(){
+		//Make API calls here.
+		this.summary_loading_ = true;
+			
 		this.page_summary = 	"Bacon is a meat product prepared from a pig and usually cured. " +
 							"It is first cured using large quantities of salt, either in a " +
 							"brine or in a dry packing; the result is fresh bacon (also known " +
@@ -668,10 +714,10 @@
 							"dried bacon is typically cooked before eating, often by frying. " +
 							"Boiled bacon is ready to eat, as is some smoked bacon, but may be " +
 							"cooked further before eating.";
-							
 		this.page_image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Made20bacon.png/320px-Made20bacon.png"
 	
-		//Make a call to the mediaWiki API here.
+	
+	//Make a call to the mediaWiki API here.
 		/*
 		 {}.bind(this))
 				.catch((function (err) {
@@ -692,9 +738,23 @@
 		
 				}).bind(this));
 		*/
+		
+		this.summary_loading_ = false;
 	
-		this.loading_ = false;
-		this.display_ = true;
+	},
+	linksApiCall_: function(){
+		//Make API calls here.
+		this.links_loading_ = true;
+		
+		//console.log("About to alter array");
+		
+		for(var i = 0; i < this.small_links_array.length; i++){
+			this.set("small_links_array." + i,  JSON.stringify(Math.random()));
+		}
+		
+		//console.log(this.small_links_array);
+		
+		this.links_loading_ = false;
 	},
 	  
 	removeAllLinks: function() {
@@ -752,7 +812,16 @@
 	}
 
 	return '#'; */
-	}
+	},
+	
+	loadQuestView_: function(){
+		this.display_ = false;
+		this.main_menu_view_ = false;
+		this.explore_view_ = false;
+		this.questView_ = true;
+
+		this.display_ = true;
+	},
 	});
   </script>
 </dom-module>
