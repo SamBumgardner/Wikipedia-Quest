@@ -518,6 +518,11 @@
 			questView_:{
 				type: Boolean,
 				value: false
+			},
+			
+			explore_initialized:{
+				type: Boolean,
+				value: false
 			}
     },
 
@@ -678,7 +683,10 @@
 		
 	},
 	
-	
+	//Used to update the list of links.
+	arrayItem: function(change, index) {
+        return this.get(index, change.base);
+    },
 
 	attributeChanged: function (name, type) {
 		if (/^current_wiki_page$/i.test(name)) {
@@ -702,9 +710,19 @@
 		}
 	},
 	
-	arrayItem: function(change, index) {
-        return this.get(index, change.base);
-    },
+	
+	initializeExplore(){
+	//Since the elements of the DOM-if aren't available right away,
+	//I used a timeout to retry the bind until it worked. 
+		try{
+			this.$$("#searchButton").addEventListener("click", this.searchButton_.bind(this), false);
+			this.$$("#searchText").addEventListener("keypress", this.searchBoxEnter_.bind(this), false);
+			this.explore_initialized = true;
+		}catch(err){
+			var t = setTimeout(this.initializeExplore.bind(this), 250);
+		}
+	},
+	
 	
 	loadWikiPage_: function () {
 		this.error_ = false;
@@ -717,9 +735,11 @@
 			
 			this.switchWikiPage_(this.current_wiki_page);
 			
-
 			this.display_ = true;
 			this.wiki_page_changed = false;
+			if(!this.explore_initialized){
+				this.initializeExplore();
+			}
 		}	
 		
 		
@@ -736,6 +756,7 @@
 		this.overviewApiCall_();
 		this.linksApiCall_();
 	},
+	
 	overviewApiCall_: function(){
 		//Make API calls here.
 		this.summary_loading_ = true;
@@ -816,9 +837,27 @@
 
 	  return array;
 	},
+	
+	searchBoxEnter_: function(evt){
+		if(evt.charCode == 13){
+			this.$$("#searchButton").click();
+		}
+	},
 	  
+	searchButton_: function(){
 
-
+		for(var i =0 ; i < this.full_links_array.length ; i++ ){
+			if(this.full_links_array[i].title == this.$$("#searchText").value){
+				page("/explore/" + this.full_links_array[i].title);
+				this.$$("#searchText").value = "";
+				return;
+			}
+		}
+		//Getting down here means it wasn't found.
+		alert("ERROR: It looks like that particular article isn't connected the the current one. " +
+			"Make sure that you enter the article name, and NOT the anme of the link that leads to it. " +
+			"Also keep in mind that article names may be case-sensitive.");
+	},
 	
 	loadQuestView_: function(){
 		this.display_ = false;
