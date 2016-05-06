@@ -828,12 +828,6 @@
         script.onload = function () {
           this.parentElement.removeChild(this);
         };
-		
-		
-		
-
-		
-		
 	},
 	//this is the Fisher-Yates Shuffle, not mine.
 	shuffle :function(array) {
@@ -854,62 +848,8 @@
 	  return array;
 	},
 	  
-	removeAllLinks: function() {
-	//Same idea, but remove links instead.
-	/*var Ul = this.$.listOfEvents;
 
-	while(Ul.firstChild != null){
-		Ul.firstChild.remove();
-	}*/
-	},
 
-	insertAllEvents: function() {
-	//Add links with the wiki names
-	//The links will go to the page routing, though.
-
-	/*
-	var Ul = this.$.listOfEvents;
-
-	if(this.eventList){
-		for( var i = 0; i < this.eventList.length ; i++){
-
-		  
-		  var newListElement = document.createElement("li");
-		  var newParagraph = document.createElement("p"); 
-		  var newLink = document.createElement("a");
-		  
-		  newParagraph.innerHTML = this.formattotal-time(this.eventList[i]);
-		  newLink.href = this.getMoreInfoLink(this.eventList[i].link);
-		  newLink.innerHTML = this.eventList[i].title.$t;
-		  
-		  newParagraph.appendChild(newLink);
-		  newListElement.appendChild(newParagraph);
-		  
-		  
-		  Ul.appendChild(newListElement);
-		}
-	}
-	else{
-		throw new Error("invalidDate");
-	}
-	*/
-
-	},
-	getMoreInfoLink: function (links) {
-	//Can use the same idea to generate the hrefs for the wiki links.
-
-	/*if (!links || links.length < 1) {
-	  return '#';
-	}
-
-	for (var i = 0; i < links.length; i++) {
-	  if (links[i].rel === 'alternate' && links[i].type === 'text/html') {
-		return links[i].href;
-	  }
-	}
-
-	return '#'; */
-	},
 	
 	loadQuestView_: function(){
 		this.display_ = false;
